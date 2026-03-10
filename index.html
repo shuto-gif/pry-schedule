@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PRY 週間スケジュール v3</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;600;800&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #0a0a0c;
+  --surface: #141418;
+  --surface2: #1c1c22;
+  --border: #2a2a33;
+  --text: #e8e6e3;
+  --text-dim: #8a8892;
+  --pry: #c9a84c;
+  --pry-dim: rgba(201,168,76,0.18);
+  --design: #5b8def;
+  --design-dim: rgba(91,141,239,0.18);
+  --yt: #e85d5d;
+  --yt-dim: rgba(232,93,93,0.18);
+  --live: #ff3d3d;
+  --live-dim: rgba(255,61,61,0.22);
+  --notify: #f0a030;
+  --notify-dim: rgba(240,160,48,0.18);
+  --free: #3a3a44;
+  --free-dim: rgba(58,58,68,0.5);
+  --board: #7c6fe0;
+  --board-dim: rgba(124,111,224,0.2);
+  --off: #2a2a33;
+  --off-dim: rgba(42,42,51,0.5);
+  --move: #555;
+  --move-dim: rgba(80,80,90,0.3);
+}
+* { margin:0; padding:0; box-sizing:border-box; }
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'Noto Sans JP', sans-serif;
+  min-height: 100vh;
+}
+.header {
+  padding: 16px 20px 10px;
+  border-bottom: 1px solid var(--border);
+  display: flex; align-items: baseline; gap: 16px;
+}
+.header h1 { font-size: 16px; font-weight: 800; letter-spacing: .08em; color: var(--pry); }
+.header .ver { font-family:'DM Mono',monospace; font-size:10px; color:var(--text-dim); background:var(--surface2); padding:2px 8px; border-radius:4px; }
+.legend {
+  padding: 8px 20px; display:flex; gap:14px; flex-wrap:wrap; border-bottom:1px solid var(--border);
+}
+.legend-item { display:flex; align-items:center; gap:4px; font-size:9px; color:var(--text-dim); }
+.legend-dot { width:8px; height:8px; border-radius:2px; }
+
+.container { padding:10px 8px 16px; overflow-x:auto; }
+
+.timetable {
+  display: grid;
+  grid-template-columns: 38px repeat(7, 1fr);
+}
+.time-col { position:relative; }
+.time-label {
+  font-family:'DM Mono',monospace; font-size:8px; color:var(--text-dim);
+  position:absolute; right:4px; transform:translateY(-4px);
+}
+.day-col { border-left:1px solid var(--border); }
+.day-hdr {
+  padding:5px 4px; text-align:center; border-bottom:1px solid var(--border);
+  background:var(--bg); position:sticky; top:0; z-index:10;
+}
+.day-name { font-size:11px; font-weight:800; letter-spacing:.04em; }
+.day-theme { font-size:8px; font-weight:300; color:var(--text-dim); margin-top:1px; }
+.day-body { position:relative; }
+.hline { position:absolute; left:0; right:0; height:1px; background:var(--border); opacity:.35; }
+
+.ev {
+  position:absolute; left:2px; right:2px; border-radius:3px; padding:2px 4px;
+  font-size:8px; line-height:1.25; overflow:hidden; border-left:2px solid;
+  transition: transform .12s, box-shadow .12s;
+}
+.ev:hover { transform:scale(1.02); box-shadow:0 4px 16px rgba(0,0,0,.4); z-index:5; }
+.ev-t { font-weight:600; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+.ev-s { font-weight:300; color:var(--text-dim); font-size:7px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+
+.ev-board  { background:var(--board-dim);  border-color:var(--board);  color:#c4bcf5; }
+.ev-pry    { background:var(--pry-dim);    border-color:var(--pry);    color:#e8d89a; }
+.ev-design { background:var(--design-dim); border-color:var(--design); color:#a4c1f7; }
+.ev-yt     { background:var(--yt-dim);     border-color:var(--yt);     color:#f5a8a8; }
+.ev-live   { background:var(--live-dim);   border-color:var(--live);   color:#ff9a9a; }
+.ev-notify { background:var(--notify-dim); border-color:var(--notify); color:#f5d08a; }
+.ev-free   { background:var(--free-dim);   border-color:var(--free);   color:var(--text-dim); }
+.ev-off    { background:var(--off-dim);    border-color:var(--off);    color:#555; }
+.ev-move   { background:var(--move-dim);   border-color:var(--move);   color:var(--text-dim); }
+
+.cycle { padding:28px 36px; border-top:1px solid var(--border); }
+.cycle h2 { font-size:15px; font-weight:800; color:var(--pry); letter-spacing:.05em; margin-bottom:16px; }
+.cycle-flow { display:flex; align-items:center; gap:0; justify-content:center; flex-wrap:wrap; }
+.cycle-node {
+  padding:10px 16px; border-radius:6px; font-size:11px; font-weight:600;
+  text-align:center; min-width:110px; border:1px solid;
+}
+.cycle-node small { font-weight:300; font-size:9px; display:block; margin-top:2px; }
+.cycle-arrow { font-size:16px; color:var(--text-dim); padding:0 5px; }
+.cn-off { background:var(--off-dim); border-color:#444; color:var(--text-dim); }
+.cn-pry { background:var(--live-dim); border-color:var(--live); color:#ff9a9a; }
+.cn-des { background:var(--design-dim); border-color:var(--design); color:#a4c1f7; }
+.cn-yt  { background:var(--yt-dim); border-color:var(--yt); color:#f5a8a8; }
+.zero-pt {
+  text-align:center; margin-top:20px; font-size:13px; color:var(--pry); font-weight:600;
+}
+.zero-pt span {
+  font-family:'DM Mono',monospace; background:var(--pry-dim);
+  padding:4px 12px; border-radius:4px; border:1px solid rgba(201,168,76,.3);
+}
+
+.tt {
+  display:none; position:fixed; background:#222228; border:1px solid var(--border);
+  border-radius:6px; padding:8px 12px; font-size:11px; z-index:100;
+  max-width:260px; box-shadow:0 6px 20px rgba(0,0,0,.5); pointer-events:none;
+}
+.tt-time { font-family:'DM Mono',monospace; font-size:10px; color:var(--pry); margin-bottom:3px; }
+.tt-title { font-weight:600; }
+.tt-note { font-size:10px; color:var(--text-dim); }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <h1>PRY 週間スケジュール</h1>
+  <span class="ver">v3 — 2026/03/10</span>
+</div>
+
+<div class="legend">
+  <div class="legend-item"><div class="legend-dot" style="background:var(--board)"></div>ボード作成/MTG</div>
+  <div class="legend-item"><div class="legend-dot" style="background:var(--pry)"></div>PRY（ブレスト・制作）</div>
+  <div class="legend-item"><div class="legend-dot" style="background:var(--design)"></div>デザイン / MTG</div>
+  <div class="legend-item"><div class="legend-dot" style="background:var(--yt)"></div>YouTube / スチール</div>
+  <div class="legend-item"><div class="legend-dot" style="background:var(--live)"></div>LIVE / 販売</div>
+  <div class="legend-item"><div class="legend-dot" style="background:var(--notify)"></div>配信・告知</div>
+  <div class="legend-item"><div class="legend-dot" style="background:var(--free)"></div>デザイン自由枠</div>
+</div>
+
+<div class="container">
+  <div class="timetable" id="timetable"></div>
+</div>
+
+<div class="cycle">
+  <h2>週間循環フロー</h2>
+  <div class="cycle-flow">
+    <div class="cycle-node cn-off">日曜<small>予約配信（自動）</small></div>
+    <div class="cycle-arrow">→</div>
+    <div class="cycle-node cn-pry">月曜<small>LIVE → 新作発売</small></div>
+    <div class="cycle-arrow">→</div>
+    <div class="cycle-node cn-des">火〜木<small>デザイン集中</small></div>
+    <div class="cycle-arrow">→</div>
+    <div class="cycle-node cn-yt">金曜<small>UNI撮影 → EC公開</small></div>
+    <div class="cycle-arrow">→</div>
+    <div class="cycle-node cn-yt">土曜<small>スチール → サムネ</small></div>
+    <div class="cycle-arrow">→</div>
+    <div class="cycle-node cn-off">日曜<small>非稼働 → 翌月曜へ</small></div>
+  </div>
+  <div class="zero-pt">零点通過（購入）= <span>月曜 21:00–22:00</span></div>
+</div>
+
+<div class="tt" id="tt">
+  <div class="tt-time" id="tt-time"></div>
+  <div class="tt-title" id="tt-title"></div>
+  <div class="tt-note" id="tt-note"></div>
+</div>
+
+<script>
+const SH = 8, EH = 23, PX = 38;
+const days = [
+  { n:'月', th:'PRY', c:'var(--pry)' },
+  { n:'火', th:'ボード/デザイン', c:'var(--design)' },
+  { n:'水', th:'デザイン', c:'var(--design)' },
+  { n:'木', th:'デザイン', c:'var(--design)' },
+  { n:'金', th:'YouTube/スチール', c:'var(--yt)' },
+  { n:'土', th:'YouTube/スチール', c:'var(--yt)' },
+  { n:'日', th:'非稼働', c:'#555' },
+];
+
+const evs = [
+  [ // Mon
+    {s:8,e:10,t:'ボード作成/MTG',u:'BE→THINK→DO→HAVE',c:'board'},
+    {s:10,e:14,t:'PRY ブレスト',u:'台本含む（4h）',c:'pry'},
+    {s:14,e:15,t:'PRY 追加インサート',u:'1h',c:'pry'},
+    {s:15,e:16,t:'PRY トーク',u:'1h',c:'pry'},
+    {s:19,e:19.5,t:'📢 YTコミュニティ投稿',u:'LIVE&販売告知',c:'notify'},
+    {s:20.5,e:21.33,t:'🔴 発売直前LIVE',u:'20:30–21:20',c:'live'},
+    {s:21,e:22,t:'🔴 PRY新作発売',u:'1h限定受注 21:00–22:00',c:'live',l:'50%'},
+    {s:22,e:22.5,t:'タグ付け & 分析',u:'振り返り',c:'pry'},
+  ],
+  [ // Tue
+    {s:8,e:10,t:'ボード作成/MTG',u:'BE→THINK→DO→HAVE',c:'board'},
+    {s:10,e:13,t:'[予備] PRYトーク',u:'月曜分の補完（必要時のみ）',c:'pry',o:.35},
+    {s:13,e:19,t:'デザインワーク自由枠',u:'固定タスクなし',c:'free'},
+    {s:19,e:20,t:'📢 UNIQLO前夜準備②',u:'',c:'notify'},
+  ],
+  [ // Wed
+    {s:8,e:10,t:'ボード作成/MTG',u:'BE→THINK→DO→HAVE',c:'board'},
+    {s:10,e:13,t:'CO MTG（対面）',u:'株式会社CO / ジュエリー',c:'design'},
+    {s:13,e:19,t:'デザインワーク自由枠',u:'固定タスクなし',c:'free'},
+    {s:19,e:20,t:'📢 UNIQLO前夜準備①',u:'',c:'notify'},
+  ],
+  [ // Thu
+    {s:8,e:10,t:'ボード作成/MTG',u:'BE→THINK→DO→HAVE',c:'board'},
+    {s:10,e:13,t:'SR MTG（対面）',u:'SR UNITED / 縫製・生産管理',c:'design'},
+    {s:13,e:20,t:'デザインワーク自由枠',u:'固定タスクなし',c:'free'},
+  ],
+  [ // Fri
+    {s:8,e:10,t:'ボード作成/MTG',u:'BE→THINK→DO→HAVE',c:'board'},
+    {s:10,e:10.5,t:'PRY ブレスト',u:'短縮版（30min）',c:'pry'},
+    {s:10.5,e:13,t:'UNI市場環境調査会議',u:'UNIQLOリサーチ',c:'yt'},
+    {s:13,e:14,t:'🚕 移動 / ランチ',u:'',c:'move'},
+    {s:14,e:16.5,t:'UNIブレスト&台本&サムネ',u:'2.5h',c:'yt'},
+    {s:16.5,e:17.25,t:'UNIトーク&インサート①',u:'撮影',c:'yt'},
+    {s:17.25,e:18,t:'UNIトーク&インサート②',u:'撮影',c:'yt'},
+    {s:19,e:19.5,t:'📢 PRY新作ページ公開',u:'EC公開 & 配布',c:'notify'},
+  ],
+  [ // Sat
+    {s:8,e:9,t:'ボード作成/MTG',u:'土曜短縮版（1h）',c:'board'},
+    {s:9,e:10,t:'UNIトーク&インサート①',u:'撮影',c:'yt'},
+    {s:10,e:11,t:'UNIトーク&インサート②',u:'撮影',c:'yt'},
+    {s:11,e:17,t:'スチール撮影',u:'角田さん要確認（6h）',c:'yt'},
+    {s:17,e:19,t:'全サムネ50%完成',u:'2h',c:'yt'},
+    {s:19,e:19.5,t:'📢 UNIQLO概要②',u:'準備',c:'notify'},
+  ],
+  [ // Sun
+    {s:8,e:23,t:'非稼働',u:'予約配信のみ（自動）',c:'off'},
+    {s:12,e:12.5,t:'📢 メルマガ配信',u:'LIVE&発売告知（予約）',c:'notify',l:'50%'},
+    {s:19,e:19.5,t:'📢 UNIQLOサムネ公開',u:'予約更新',c:'notify',l:'50%'},
+    {s:21,e:21.5,t:'📢 YT / LINE配信',u:'発売告知（予約）',c:'notify',l:'50%'},
+  ],
+];
+
+function fmt(h){ const hh=Math.floor(h), mm=Math.round((h%1)*60); return `${String(hh).padStart(2,'0')}:${String(mm).padStart(2,'0')}`; }
+
+function build(){
+  const tbl = document.getElementById('timetable');
+  const totalH = EH - SH;
+
+  // Time column
+  const tc = document.createElement('div');
+  tc.className='time-col';
+  tc.style.height = (totalH*PX+48)+'px';
+  tc.style.marginTop = '48px';
+  for(let h=SH;h<=EH;h++){
+    const l=document.createElement('div');
+    l.className='time-label';
+    l.style.top=(h-SH)*PX+'px';
+    l.textContent=String(h).padStart(2,'0')+':00';
+    tc.appendChild(l);
+  }
+  tbl.appendChild(tc);
+
+  days.forEach((d,di)=>{
+    const col=document.createElement('div');
+    col.className='day-col';
+
+    const hdr=document.createElement('div');
+    hdr.className='day-hdr';
+    hdr.innerHTML=`<div class="day-name" style="color:${d.c}">${d.n}</div><div class="day-theme">${d.th}</div>`;
+    col.appendChild(hdr);
+
+    const body=document.createElement('div');
+    body.className='day-body';
+    body.style.height=totalH*PX+'px';
+
+    for(let h=0;h<=totalH;h++){
+      const ln=document.createElement('div');
+      ln.className='hline';
+      ln.style.top=h*PX+'px';
+      body.appendChild(ln);
+    }
+
+    (evs[di]||[]).forEach(ev=>{
+      const el=document.createElement('div');
+      el.className=`ev ev-${ev.c}`;
+      const top=(ev.s-SH)*PX;
+      const height=Math.max((ev.e-ev.s)*PX-2,16);
+      el.style.top=top+'px';
+      el.style.height=height+'px';
+      if(ev.o) el.style.opacity=ev.o;
+      if(ev.l) el.style.left=ev.l;
+      el.innerHTML=`<div class="ev-t">${ev.t}</div>${height>24?`<div class="ev-s">${ev.u}</div>`:''}`;
+
+      el.addEventListener('mouseenter',e=>{
+        const tt=document.getElementById('tt');
+        document.getElementById('tt-time').textContent=`${fmt(ev.s)} — ${fmt(ev.e)}`;
+        document.getElementById('tt-title').textContent=ev.t.replace(/[📢🔴🚕]\s?/g,'');
+        document.getElementById('tt-note').textContent=ev.u||'';
+        tt.style.display='block';
+        tt.style.left=(e.clientX+14)+'px';
+        tt.style.top=(e.clientY-8)+'px';
+      });
+      el.addEventListener('mouseleave',()=>{ document.getElementById('tt').style.display='none'; });
+      el.addEventListener('mousemove',e=>{
+        const tt=document.getElementById('tt');
+        tt.style.left=(e.clientX+14)+'px';
+        tt.style.top=(e.clientY-8)+'px';
+      });
+
+      body.appendChild(el);
+    });
+
+    col.appendChild(body);
+    tbl.appendChild(col);
+  });
+}
+build();
+</script>
+</body>
+</html>
