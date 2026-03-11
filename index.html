@@ -129,7 +129,7 @@ body { background: var(--bg); color: var(--text); font-family: 'Noto Sans JP', s
   <div class="cycle-flow">
     <div class="cycle-node cn-off">日曜<small>予約配信（自動）</small></div>
     <div class="cycle-arrow">→</div>
-    <div class="cycle-node cn-pry">月曜<small>PRY撮影→UNI撮影→LIVE→発売</small></div>
+    <div class="cycle-node cn-pry">月曜<small>スチール→UNI撮影→LIVE→発売</small></div>
     <div class="cycle-arrow">→</div>
     <div class="cycle-node cn-des">火曜<small>デザイン + FW</small></div>
     <div class="cycle-arrow">→</div>
@@ -139,7 +139,7 @@ body { background: var(--bg); color: var(--text); font-family: 'Noto Sans JP', s
     <div class="cycle-arrow">→</div>
     <div class="cycle-node cn-pry">金曜<small>PRY撮影→UNI撮影→EC公開</small></div>
     <div class="cycle-arrow">→</div>
-    <div class="cycle-node cn-yt">土曜<small>台本→スチール→サムネ</small></div>
+    <div class="cycle-node cn-pry">土曜<small>台本→PRY撮影→サムネ</small></div>
     <div class="cycle-arrow">→</div>
     <div class="cycle-node cn-off">日曜<small>非稼働→翌月曜</small></div>
   </div>
@@ -157,21 +157,18 @@ body { background: var(--bg); color: var(--text); font-family: 'Noto Sans JP', s
 <script>
 const SH = 8, EH = 24, PX = 38;
 const days = [
-  { n:'月', th:'PRY + UNI', c:'var(--pry)' },
+  { n:'月', th:'スチール + UNI', c:'var(--pry)' },
   { n:'火', th:'デザイン + FW', c:'var(--design)' },
   { n:'水', th:'デザイン集中', c:'var(--design)' },
   { n:'木', th:'外部デザインMTG集約', c:'var(--mtg)' },
   { n:'金', th:'PRY + UNI', c:'var(--pry)' },
-  { n:'土', th:'台本 + スチール', c:'var(--yt)' },
+  { n:'土', th:'台本 + PRY撮影', c:'var(--pry)' },
   { n:'日', th:'非稼働', c:'#555' },
 ];
 
 const evs = [
   [ // Mon
-    {s:8.5,e:9,t:'ボード＆チューニング',u:'シュウト・Zastin・Issei',c:'board'},
-    {s:9,e:13,t:'PRY撮影',u:'From First Building（4h）',c:'pry'},
-    {s:13,e:13.5,t:'ランチ・切り替え',u:'移動なし',c:'rest'},
-    {s:13.5,e:14,t:'昼寝',u:'30min',c:'rest'},
+    {s:8,e:14,t:'スチール撮影',u:'角田さん（6h）',c:'pry'},
     {s:14,e:17,t:'UNI市場環境調査',u:'UNIQLOリサーチ（3h）',c:'yt'},
     {s:17,e:21,t:'UNI撮影',u:'トーク＋インサート（4h）',c:'yt'},
     {s:21.5,e:22.33,t:'🔴 発売直前LIVE',u:'21:30–22:20',c:'live'},
@@ -218,7 +215,7 @@ const evs = [
     {s:9,e:12.5,t:'PRY台本・構成',u:'深い思考時間（3.5h）',c:'pry'},
     {s:12.5,e:13,t:'ランチ・切り替え',u:'',c:'rest'},
     {s:13,e:13.5,t:'昼寝',u:'30min',c:'rest'},
-    {s:13.5,e:18,t:'スチール撮影',u:'角田さん（4〜4.5h）',c:'yt'},
+    {s:13.5,e:18,t:'PRY撮影',u:'From First Building（4〜4.5h）',c:'pry'},
     {s:17.5,e:19,t:'ボード再設計',u:'',c:'board',l:'50%'},
     {s:19,e:19.5,t:'📢 UNI動画更新（YT）',u:'YouTube公開',c:'notify'},
     {s:19,e:21,t:'全サムネ50%完成',u:'2h',c:'yt',l:'50%'},
