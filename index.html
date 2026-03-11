@@ -108,7 +108,7 @@ body { background: var(--bg); color: var(--text); font-family: 'Noto Sans JP', s
 </div>
 
 <div class="legend">
-  <div class="legend-item"><div class="legend-dot" style="background:var(--board)"></div>KANBAN確認</div>
+  <div class="legend-item"><div class="legend-dot" style="background:var(--board)"></div>ボード＆チューニング</div>
   <div class="legend-item"><div class="legend-dot" style="background:var(--pry)"></div>PRY（撮影・台本）</div>
   <div class="legend-item"><div class="legend-dot" style="background:var(--yt)"></div>UNI（調査・撮影）</div>
   <div class="legend-item"><div class="legend-dot" style="background:var(--design)"></div>デザインワーク</div>
@@ -135,7 +135,7 @@ body { background: var(--bg); color: var(--text); font-family: 'Noto Sans JP', s
     <div class="cycle-arrow">→</div>
     <div class="cycle-node cn-des">水曜<small>デザイン集中</small></div>
     <div class="cycle-arrow">→</div>
-    <div class="cycle-node cn-mtg">木曜<small>外部MTG集約</small></div>
+    <div class="cycle-node cn-mtg">木曜<small>外部デザインMTG集約</small></div>
     <div class="cycle-arrow">→</div>
     <div class="cycle-node cn-pry">金曜<small>PRY撮影→UNI撮影→EC公開</small></div>
     <div class="cycle-arrow">→</div>
@@ -160,7 +160,7 @@ const days = [
   { n:'月', th:'PRY + UNI', c:'var(--pry)' },
   { n:'火', th:'デザイン + FW', c:'var(--design)' },
   { n:'水', th:'デザイン集中', c:'var(--design)' },
-  { n:'木', th:'外部MTG集約', c:'var(--mtg)' },
+  { n:'木', th:'外部デザインMTG集約', c:'var(--mtg)' },
   { n:'金', th:'PRY + UNI', c:'var(--pry)' },
   { n:'土', th:'台本 + スチール', c:'var(--yt)' },
   { n:'日', th:'非稼働', c:'#555' },
@@ -168,7 +168,7 @@ const days = [
 
 const evs = [
   [ // Mon
-    {s:8,e:8.5,t:'KANBAN確認',u:'シュウト・Zastin・Issei',c:'board'},
+    {s:8.5,e:9,t:'ボード＆チューニング',u:'シュウト・Zastin・Issei',c:'board'},
     {s:9,e:13,t:'PRY撮影',u:'From First Building（4h）',c:'pry'},
     {s:13,e:13.5,t:'ランチ・切り替え',u:'移動なし',c:'rest'},
     {s:13.5,e:14,t:'昼寝',u:'30min',c:'rest'},
@@ -179,14 +179,15 @@ const evs = [
     {s:23,e:23.5,t:'ボード再設計',u:'翌日以降を更新',c:'board'},
   ],
   [ // Tue
-    {s:8,e:8.5,t:'KANBAN確認',u:'シュウト・Zastin・Issei',c:'board'},
-    {s:9,e:12,t:'デザインワーク',u:'[予備] PRYトーク含む',c:'design'},
+    {s:8.5,e:9,t:'ボード＆チューニング',u:'シュウト・Zastin・Issei',c:'board'},
+    {s:9,e:10.5,t:'サンプルKANBAN更新',u:'全サンプルの進捗・ステータス',c:'pry'},
+    {s:10.5,e:12,t:'デザインワーク',u:'[予備] PRYトーク含む',c:'design'},
     {s:13,e:18,t:'フィールドワーク',u:'他ブランド・古着屋・アーカイブ',c:'field'},
     {s:19,e:20,t:'📢 UNIQLO前夜準備②',u:'',c:'notify'},
     {s:20,e:21.5,t:'ボード再設計',u:'インプットを言語化・構造化',c:'board'},
   ],
   [ // Wed
-    {s:8,e:8.5,t:'KANBAN確認',u:'シュウト・Zastin・Issei',c:'board'},
+    {s:8.5,e:9,t:'ボード＆チューニング',u:'シュウト・Zastin・Issei',c:'board'},
     {s:9,e:13.5,t:'デザインワーク',u:'外部MTGなし・フル集中',c:'design'},
     {s:13.5,e:14,t:'昼寝',u:'30min',c:'rest'},
     {s:14,e:18,t:'デザインワーク',u:'後半',c:'design'},
@@ -194,15 +195,15 @@ const evs = [
     {s:19,e:20,t:'📢 UNIQLO前夜準備①',u:'',c:'notify',l:'50%'},
   ],
   [ // Thu
-    {s:8,e:8.5,t:'KANBAN確認',u:'シュウト・Zastin・Issei',c:'board'},
+    {s:8.5,e:9,t:'ボード＆チューニング',u:'シュウト・Zastin・Issei',c:'board'},
     {s:9,e:11,t:'CO MTG（対面）',u:'株式会社CO｜ジュエリー',c:'mtg'},
     {s:11,e:13,t:'SR MTG（対面）',u:'SR UNITED｜縫製・生産管理',c:'mtg'},
     {s:13,e:14.5,t:'休憩（昼寝含む）',u:'1〜1.5h',c:'rest'},
-    {s:15,e:19,t:'業務委託MTG変動枠',u:'香水・レザー等｜チーム委任',c:'mtg'},
+    {s:15,e:19,t:'業務委託デザインMTG変動枠',u:'香水・レザー等｜チーム委任',c:'mtg'},
     {s:19,e:20,t:'ボード再設計',u:'情報密度最大',c:'board'},
   ],
   [ // Fri
-    {s:8,e:8.5,t:'KANBAN確認',u:'シュウト・Zastin・Issei',c:'board'},
+    {s:8.5,e:9,t:'ボード＆チューニング',u:'シュウト・Zastin・Issei',c:'board'},
     {s:9,e:13,t:'PRY撮影',u:'From First Building（4h）',c:'pry'},
     {s:13,e:13.5,t:'ランチ・切り替え',u:'移動なし',c:'rest'},
     {s:13.5,e:14,t:'昼寝',u:'30min',c:'rest'},
@@ -212,7 +213,7 @@ const evs = [
     {s:20,e:20.5,t:'📢 PRY新作ページ公開',u:'EC公開',c:'notify'},
   ],
   [ // Sat
-    {s:8,e:8.5,t:'KANBAN確認',u:'シュウト・Zastin・Issei',c:'board'},
+    {s:8.5,e:9,t:'ボード＆チューニング',u:'シュウト・Zastin・Issei',c:'board'},
     {s:9,e:12.5,t:'PRY台本・構成',u:'深い思考時間（3.5h）',c:'pry'},
     {s:12.5,e:13,t:'ランチ・切り替え',u:'',c:'rest'},
     {s:13,e:13.5,t:'昼寝',u:'30min',c:'rest'},
