@@ -44,21 +44,23 @@
 <script>
 const SH=8,EH=24,PX=38;
 const days=[
-  {n:'月',th:'KANBAN + 撮影補助 + LIVE',c:'var(--pry)'},
+  {n:'月',th:'スチール/ムービー + KANBAN + LIVE',c:'var(--pry)'},
   {n:'火',th:'ボードワーク',c:'var(--board)'},
   {n:'水',th:'個人ワーク（リモート）',c:'var(--design)'},
-  {n:'木',th:'外部MTG + 生産管理',c:'var(--mtg)'},
-  {n:'金',th:'—',c:'#555'},
+  {n:'木',th:'外部MTG + ボード再設計',c:'var(--mtg)'},
+  {n:'金',th:'PRY動画更新 + 新作ページ公開',c:'var(--pry)'},
   {n:'土',th:'個人ワーク or イベント',c:'var(--design)'},
   {n:'日',th:'非稼働',c:'#555'},
 ];
 const evs=[
   [ // Mon
-    {s:12,e:14,t:'KANBAN更新&アイテム管理',u:'',c:'pry'},
+    {s:8,e:14,t:'スチール/ムービー撮影',u:'角田さん or 平永さん（隔週ローテ）',c:'pry'},
+    {s:12,e:14,t:'サンプルKANBAN更新&アイテム管理',u:'',c:'pry',l:'50%'},
     {s:14,e:15,t:'サンプル指示出し確認',u:'with shuto',c:'pry'},
-    {s:15,e:18,t:'撮影補助&ECページ完成',u:'',c:'notify'},
+    {s:15,e:18,t:'UNI撮影補助&ECページ完成',u:'',c:'yt'},
+    {s:20.25,e:20.5,t:'📢 LINE配信',u:'LIVE&販売告知',c:'notify'},
     {s:20.5,e:21.33,t:'🔴 発売直前LIVE',u:'all',c:'live'},
-    {s:21,e:22,t:'🔴 PRY新作発売',u:'all',c:'live',l:'50%'},
+    {s:21,e:22,t:'🔴 PRY新作発売',u:'1h限定受注',c:'live',l:'50%'},
     {s:22.33,e:23,t:'ボード再設計&後片付け',u:'all',c:'board'},
   ],
   [ // Tue
@@ -66,20 +68,29 @@ const evs=[
   ],
   [ // Wed
     {s:10,e:21,t:'個人ワーク（リモート）',u:'生産背景との連絡&イベント準備&ロイヤルカスタマー施策',c:'design'},
+    {s:19,e:19.5,t:'📢 UNI動画更新（YT）',u:'',c:'notify',l:'50%'},
   ],
   [ // Thu
-    {s:9,e:10,t:'デザインボード＆チューニング',u:'all',c:'board'},
+    {s:9,e:10,t:'デザインボード＆チューニング&アイテム管理',u:'all',c:'board'},
     {s:10,e:13,t:'SR MTG（対面）',u:'生産管理',c:'mtg'},
     {s:13,e:15,t:'CO MTG（対面）',u:'生産管理',c:'mtg'},
     {s:15,e:19,t:'業務委託MTG&ボード再設計',u:'with shuto',c:'mtg'},
+    {s:19,e:19.5,t:'📢 UNI動画更新（YT）',u:'',c:'notify'},
   ],
   [ // Fri
+    {s:19,e:19.5,t:'📢 PRY動画更新（YT）',u:'',c:'pry'},
+    {s:20,e:20.5,t:'📢 PRY新作ページ公開',u:'EC',c:'notify'},
   ],
   [ // Sat
     {s:10,e:21,t:'個人ワーク or イベント',u:'LINE対応',c:'design'},
+    {s:19,e:19.5,t:'📢 UNI動画更新（YT）',u:'',c:'notify',l:'50%'},
   ],
   [ // Sun
-    {s:8,e:24,t:'非稼働',u:'',c:'off'},
+    {s:8,e:24,t:'非稼働',u:'予約配信のみ',c:'off'},
+    {s:12,e:12.5,t:'📢 メルマガ配信',u:'予約',c:'notify',l:'50%'},
+    {s:19,e:19.5,t:'📢 UNI動画更新（YT）',u:'予約',c:'notify',l:'50%'},
+    {s:20,e:20.5,t:'📢 YTコミュニティ投稿',u:'予約',c:'notify',l:'50%'},
+    {s:21,e:21.5,t:'📢 LINE配信',u:'予約',c:'notify',l:'50%'},
   ],
 ];
 function fmt(h){const hh=Math.floor(h),mm=Math.round((h%1)*60);return `${String(hh).padStart(2,'0')}:${String(mm).padStart(2,'0')}`;}
