@@ -133,7 +133,7 @@ body { background: var(--bg); color: var(--text); font-family: 'Noto Sans JP', s
     <div class="cycle-arrow">→</div>
     <div class="cycle-node cn-des">火曜<small>デザイン + FW</small></div>
     <div class="cycle-arrow">→</div>
-    <div class="cycle-node cn-des">水曜<small>デザイン集中</small></div>
+    <div class="cycle-node cn-des">水曜<small>デザイン集中（一人）</small></div>
     <div class="cycle-arrow">→</div>
     <div class="cycle-node cn-mtg">木曜<small>外部デザインMTG集約</small></div>
     <div class="cycle-arrow">→</div>
@@ -159,7 +159,7 @@ const SH = 8, EH = 24, PX = 38;
 const days = [
   { n:'月', th:'スチール + UNI', c:'var(--pry)' },
   { n:'火', th:'デザイン + FW', c:'var(--design)' },
-  { n:'水', th:'デザイン集中', c:'var(--design)' },
+  { n:'水', th:'デザイン集中（一人デー）', c:'var(--design)' },
   { n:'木', th:'外部デザインMTG集約', c:'var(--mtg)' },
   { n:'金', th:'PRY台本 + UNI', c:'var(--pry)' },
   { n:'土', th:'台本 + PRY撮影', c:'var(--pry)' },
@@ -184,8 +184,7 @@ const evs = [
     {s:20,e:21.5,t:'ボード再設計',u:'インプットを言語化・構造化',c:'board'},
   ],
   [ // Wed
-    {s:8.5,e:9,t:'ボード＆チューニング',u:'シュウト・Zastin・Issei',c:'board'},
-    {s:9,e:13.5,t:'デザインワーク',u:'外部MTGなし・フル集中',c:'design'},
+    {s:9,e:13.5,t:'デザインワーク',u:'一人デー・外部MTGなし',c:'design'},
     {s:13.5,e:14,t:'昼寝',u:'30min',c:'rest'},
     {s:14,e:18,t:'デザインワーク',u:'後半',c:'design'},
     {s:18,e:19.5,t:'ボード再設計',u:'1〜1.5h',c:'board'},
