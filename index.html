@@ -133,7 +133,7 @@ body { background: var(--bg); color: var(--text); font-family: 'Noto Sans JP', s
     <div class="cycle-arrow">→</div>
     <div class="cycle-node cn-des">火曜<small>AM チーム → PM 個人ワーク</small></div>
     <div class="cycle-arrow">→</div>
-    <div class="cycle-node cn-des">水曜<small>個人ワーク / 出社なし</small></div>
+    <div class="cycle-node cn-des">水曜<small>個人ワーク</small></div>
     <div class="cycle-arrow">→</div>
     <div class="cycle-node cn-mtg">木曜<small>外部デザインMTG集約</small></div>
     <div class="cycle-arrow">→</div>
@@ -159,7 +159,7 @@ const SH = 8, EH = 24, PX = 38;
 const days = [
   { n:'月', th:'スチール + UNI', c:'var(--pry)' },
   { n:'火', th:'AM チーム → PM 個人ワーク', c:'var(--design)' },
-  { n:'水', th:'個人ワーク / 出社なし', c:'var(--design)' },
+  { n:'水', th:'個人ワーク', c:'var(--design)' },
   { n:'木', th:'外部デザインMTG集約', c:'var(--mtg)' },
   { n:'金', th:'PRY台本 + UNI', c:'var(--pry)' },
   { n:'土', th:'台本 + PRY撮影', c:'var(--pry)' },
@@ -179,11 +179,11 @@ const evs = [
     {s:8.5,e:9,t:'ボード＆チューニング',u:'シュウト・Zastin・Issei',c:'board'},
     {s:9,e:10.5,t:'サンプルKANBAN更新',u:'全サンプルの進捗・ステータス',c:'pry'},
     {s:10.5,e:13,t:'デザインワーク',u:'[予備] PRYトーク含む',c:'design'},
-    {s:13,e:21,t:'個人ワーク',u:'出社なし・チームなし・場所自由',c:'design'},
+    {s:13,e:21,t:'個人ワーク',u:'チームなし',c:'design'},
     {s:19,e:19.5,t:'📢 UNI動画更新（YT）',u:'YouTube公開',c:'notify'},
   ],
   [ // Wed
-    {s:9,e:21,t:'個人ワーク',u:'出社なし・チームなし・場所自由',c:'design'},
+    {s:9,e:21,t:'個人ワーク',u:'チームなし',c:'design'},
     {s:19,e:19.5,t:'📢 UNI動画更新（YT）',u:'YouTube公開',c:'notify',l:'50%'},
   ],
   [ // Thu
