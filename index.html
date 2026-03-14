@@ -121,7 +121,7 @@ body { background: var(--bg); color: var(--text); font-family: 'Noto Sans JP', s
   <div class="legend-item"><div class="legend-dot" style="background:var(--mtg)"></div>外部MTG</div>
   <div class="legend-item"><div class="legend-dot" style="background:var(--live)"></div>LIVE / 販売</div>
   <div class="legend-item"><div class="legend-dot" style="background:var(--notify)"></div>配信・告知・YT公開</div>
-  <div class="legend-item"><div class="legend-dot" style="background:var(--rest)"></div>休憩</div>
+  <div class="legend-item"><div class="legend-dot" style="background:var(--field)"></div>動画納品（前日19:00締切）</div>
 </div>
 
 <div class="container">
@@ -187,10 +187,12 @@ const evs = [
   [ // Tue
     {s:11,e:12,t:'ボードワーク',u:'shuto（一人）',c:'board'},
     {s:12,e:16,t:'ボードワーク',u:'all',c:'board'},
-    {s:18,e:21,t:'PRY撮影',u:'shuto & zastin',c:'pry'},
+    {s:18,e:19,t:'🎬 水曜UNI動画 納品',u:'19:00締切 素材＋編集済',c:'field'},
+    {s:18,e:21,t:'PRY撮影',u:'shuto & zastin',c:'pry',l:'50%'},
   ],
   [ // Wed
     {s:10,e:21,t:'個人ワーク（リモート）',u:'デザイン[shuto] / サムネ[zastin] / 生産管理[issei]',c:'design'},
+    {s:18,e:19,t:'🎬 木曜UNI動画 納品',u:'19:00締切 素材＋編集済',c:'field',l:'50%'},
     {s:19,e:19.5,t:'📢 UNI動画更新（YT）',u:'[all]',c:'notify',l:'50%'},
   ],
   [ // Thu
@@ -199,6 +201,7 @@ const evs = [
     {s:10,e:13,t:'SR MTG（対面）',u:'デザイン[shuto] / 生産管理[issei] / 撮影&サムネ[zastin]',c:'mtg'},
     {s:13,e:15,t:'CO MTG（対面）',u:'デザイン[shuto] / 生産管理[issei] / 撮影&サムネ[zastin]',c:'mtg'},
     {s:15,e:19,t:'業務委託デザインMTG変動枠&ボード再設計',u:'shuto & issei',c:'mtg'},
+    {s:18,e:19,t:'🎬 金曜PRY動画 納品',u:'19:00締切 素材＋編集済',c:'field',l:'50%'},
     {s:19,e:19.5,t:'📢 UNI動画更新（YT）',u:'[all]',c:'notify'},
     {s:19,e:21,t:'全サムネ完成',u:'shuto & zastin',c:'yt',l:'50%'},
   ],
@@ -206,12 +209,14 @@ const evs = [
     {s:9,e:13,t:'PRYブレスト・構成確定',u:'shuto & zastin',c:'pry'},
     {s:14,e:16.5,t:'UNI市場環境調査',u:'shuto & zastin',c:'yt'},
     {s:16.5,e:18,t:'UNIブレスト/台本',u:'shuto & zastin',c:'yt'},
-    {s:18,e:20,t:'UNI撮影',u:'shuto & zastin',c:'yt'},
+    {s:18,e:19,t:'🎬 土曜UNI動画 納品',u:'19:00締切 素材＋編集済',c:'field'},
+    {s:18,e:20,t:'UNI撮影',u:'shuto & zastin',c:'yt',l:'50%'},
     {s:19,e:19.5,t:'📢 PRY動画更新（YT）',u:'[all]',c:'pry',l:'50%'},
     {s:20,e:20.5,t:'📢 PRY新作ページ公開',u:'EC [all]',c:'notify'},
   ],
   [ // Sat
     {s:10,e:21,t:'個人ワーク or イベント',u:'戦略&デザイン[shuto] / 告知予約[zastin] / LINE対応[issei]',c:'design'},
+    {s:18,e:19,t:'🎬 日曜UNI動画 納品',u:'19:00締切 素材＋編集済',c:'field',l:'50%'},
     {s:19,e:19.5,t:'📢 UNI動画更新（YT）',u:'[all]',c:'notify',l:'50%'},
   ],
   [ // Sun
