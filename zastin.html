@@ -3,32 +3,129 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Zastin — PRY 週間スケジュール v10</title>
+<title>Zastin — 週間スケジュール</title>
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;600;800&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
-:root{--bg:#0a0a0c;--surface:#141418;--surface2:#1c1c22;--border:#2a2a33;--text:#e8e6e3;--text-dim:#8a8892;--pry:#c9a84c;--pry-dim:rgba(201,168,76,0.18);--design:#5b8def;--design-dim:rgba(91,141,239,0.18);--yt:#e85d5d;--yt-dim:rgba(232,93,93,0.18);--live:#ff3d3d;--live-dim:rgba(255,61,61,0.22);--notify:#f0a030;--notify-dim:rgba(240,160,48,0.18);--board:#7c6fe0;--board-dim:rgba(124,111,224,0.2);--off:#2a2a33;--off-dim:rgba(42,42,51,0.5);--rest:#444;--rest-dim:rgba(68,68,68,0.35);--mtg:#d97706;--mtg-dim:rgba(217,119,6,0.18)}
-*{margin:0;padding:0;box-sizing:border-box}body{background:var(--bg);color:var(--text);font-family:'Noto Sans JP',sans-serif;min-height:100vh}
-.header{padding:16px 20px 10px;border-bottom:1px solid var(--border);display:flex;align-items:baseline;gap:16px}.header h1{font-size:16px;font-weight:800;letter-spacing:.08em;color:#e85d5d}.header .ver{font-family:'DM Mono',monospace;font-size:10px;color:var(--text-dim);background:var(--surface2);padding:2px 8px;border-radius:4px}
-.nav{padding:8px 20px;display:flex;gap:12px;border-bottom:1px solid var(--border)}.nav a{font-size:10px;color:var(--text-dim);text-decoration:none;padding:3px 10px;border-radius:4px;border:1px solid var(--border)}.nav a:hover,.nav a.active{color:var(--pry);border-color:var(--pry)}
-.legend{padding:8px 20px;display:flex;gap:14px;flex-wrap:wrap;border-bottom:1px solid var(--border)}.legend-item{display:flex;align-items:center;gap:4px;font-size:9px;color:var(--text-dim)}.legend-dot{width:8px;height:8px;border-radius:2px}
-.container{padding:10px 8px 16px;overflow-x:auto}
-.timetable{display:grid;grid-template-columns:38px repeat(7,1fr)}.time-col{position:relative}.time-label{font-family:'DM Mono',monospace;font-size:8px;color:var(--text-dim);position:absolute;right:4px;transform:translateY(-4px)}.day-col{border-left:1px solid var(--border)}.day-hdr{padding:5px 4px;text-align:center;border-bottom:1px solid var(--border);background:var(--bg);position:sticky;top:0;z-index:10}.day-name{font-size:11px;font-weight:800;letter-spacing:.04em}.day-theme{font-size:8px;font-weight:300;color:var(--text-dim);margin-top:1px}.day-body{position:relative}.hline{position:absolute;left:0;right:0;height:1px;background:var(--border);opacity:.35}
-.ev{position:absolute;left:2px;right:2px;border-radius:3px;padding:2px 4px;font-size:8px;line-height:1.25;overflow:hidden;border-left:2px solid;transition:transform .12s,box-shadow .12s}.ev:hover{transform:scale(1.02);box-shadow:0 4px 16px rgba(0,0,0,.4);z-index:5}.ev-t{font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.ev-s{font-weight:300;color:var(--text-dim);font-size:7px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.ev-board{background:var(--board-dim);border-color:var(--board);color:#c4bcf5}.ev-pry{background:var(--pry-dim);border-color:var(--pry);color:#e8d89a}.ev-design{background:var(--design-dim);border-color:var(--design);color:#a4c1f7}.ev-yt{background:var(--yt-dim);border-color:var(--yt);color:#f5a8a8}.ev-live{background:var(--live-dim);border-color:var(--live);color:#ff9a9a}.ev-notify{background:var(--notify-dim);border-color:var(--notify);color:#f5d08a}.ev-off{background:var(--off-dim);border-color:var(--off);color:#555}.ev-rest{background:var(--rest-dim);border-color:var(--rest);color:var(--text-dim)}.ev-mtg{background:var(--mtg-dim);border-color:var(--mtg);color:#fbbf24}
-.footer{text-align:center;padding:12px;font-size:9px;color:var(--text-dim);border-top:1px solid var(--border)}
-.tt{display:none;position:fixed;background:#222228;border:1px solid var(--border);border-radius:6px;padding:8px 12px;font-size:11px;z-index:100;max-width:260px;box-shadow:0 6px 20px rgba(0,0,0,.5);pointer-events:none}.tt-time{font-family:'DM Mono',monospace;font-size:10px;color:var(--pry);margin-bottom:3px}.tt-title{font-weight:600}.tt-note{font-size:10px;color:var(--text-dim)}
+:root {
+  --bg: #0a0a0c;
+  --surface: #141418;
+  --surface2: #1c1c22;
+  --border: #2a2a33;
+  --text: #e8e6e3;
+  --text-dim: #8a8892;
+  --pry: #c9a84c;
+  --pry-dim: rgba(201,168,76,0.18);
+  --design: #5b8def;
+  --design-dim: rgba(91,141,239,0.18);
+  --yt: #e85d5d;
+  --yt-dim: rgba(232,93,93,0.18);
+  --live: #ff3d3d;
+  --live-dim: rgba(255,61,61,0.22);
+  --notify: #f0a030;
+  --notify-dim: rgba(240,160,48,0.18);
+  --free: #3a3a44;
+  --free-dim: rgba(58,58,68,0.5);
+  --board: #7c6fe0;
+  --board-dim: rgba(124,111,224,0.2);
+  --off: #2a2a33;
+  --off-dim: rgba(42,42,51,0.5);
+  --move: #555;
+  --move-dim: rgba(80,80,90,0.3);
+  --field: #2e8b57;
+  --field-dim: rgba(46,139,87,0.2);
+  --rest: #444;
+  --rest-dim: rgba(68,68,68,0.35);
+  --mtg: #d97706;
+  --mtg-dim: rgba(217,119,6,0.18);
+}
+* { margin:0; padding:0; box-sizing:border-box; }
+body { background: var(--bg); color: var(--text); font-family: 'Noto Sans JP', sans-serif; min-height: 100vh; user-select:none; }
+
+.header { padding: 16px 20px 10px; border-bottom: 1px solid var(--border); display: flex; align-items: baseline; gap: 16px; flex-wrap:wrap; }
+.header h1 { font-size: 16px; font-weight: 800; letter-spacing: .08em; color: #e85d5d; }
+.header .ver { font-family:'DM Mono',monospace; font-size:10px; color:var(--text-dim); background:var(--surface2); padding:2px 8px; border-radius:4px; }
+.header .actions { margin-left:auto; display:flex; gap:8px; }
+.header .actions button { font-family:'Noto Sans JP',sans-serif; font-size:9px; padding:4px 10px; border-radius:4px; border:1px solid var(--border); background:var(--surface2); color:var(--text-dim); cursor:pointer; transition:all .15s; }
+.header .actions button:hover { border-color:var(--pry); color:var(--pry); }
+.header .actions button.danger:hover { border-color:#e85d5d; color:#e85d5d; }
+
+.legend { padding: 8px 20px; display:flex; gap:14px; flex-wrap:wrap; border-bottom:1px solid var(--border); }
+.legend-item { display:flex; align-items:center; gap:4px; font-size:9px; color:var(--text-dim); }
+.legend-dot { width:8px; height:8px; border-radius:2px; }
+
+.container { padding:10px 8px 16px; overflow-x:auto; }
+
+.timetable { display: grid; grid-template-columns: 38px repeat(7, 1fr); }
+.time-col { position:relative; }
+.time-label { font-family:'DM Mono',monospace; font-size:8px; color:var(--text-dim); position:absolute; right:4px; transform:translateY(-4px); }
+.day-col { border-left:1px solid var(--border); position:relative; }
+.day-hdr { padding:5px 4px; text-align:center; border-bottom:1px solid var(--border); background:var(--bg); position:sticky; top:0; z-index:10; }
+.day-name { font-size:11px; font-weight:800; letter-spacing:.04em; }
+.day-theme { font-size:8px; font-weight:300; color:var(--text-dim); margin-top:1px; }
+.day-body { position:relative; }
+.hline { position:absolute; left:0; right:0; height:1px; background:var(--border); opacity:.35; }
+
+.ev { position:absolute; left:2px; right:2px; border-radius:3px; padding:2px 4px; font-size:8px; line-height:1.25; overflow:hidden; border-left:2px solid; cursor:grab; transition: box-shadow .12s; z-index:1; }
+.ev:hover { box-shadow:0 4px 16px rgba(0,0,0,.4); z-index:5; }
+.ev.dragging { opacity:.85; z-index:50; cursor:grabbing; box-shadow:0 8px 30px rgba(0,0,0,.6); }
+.ev-t { font-weight:600; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; pointer-events:none; }
+.ev-s { font-weight:300; color:var(--text-dim); font-size:7px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; pointer-events:none; }
+.ev .resize-handle { position:absolute; bottom:0; left:0; right:0; height:6px; cursor:ns-resize; }
+.ev .resize-handle:hover { background:rgba(255,255,255,.08); }
+
+.ev-board  { background:var(--board-dim);  border-color:var(--board);  color:#c4bcf5; }
+.ev-pry    { background:var(--pry-dim);    border-color:var(--pry);    color:#e8d89a; }
+.ev-design { background:var(--design-dim); border-color:var(--design); color:#a4c1f7; }
+.ev-yt     { background:var(--yt-dim);     border-color:var(--yt);     color:#f5a8a8; }
+.ev-live   { background:var(--live-dim);   border-color:var(--live);   color:#ff9a9a; }
+.ev-notify { background:var(--notify-dim); border-color:var(--notify); color:#f5d08a; }
+.ev-free   { background:var(--free-dim);   border-color:var(--free);   color:var(--text-dim); }
+.ev-off    { background:var(--off-dim);    border-color:var(--off);    color:#555; }
+.ev-move   { background:var(--move-dim);   border-color:var(--move);   color:var(--text-dim); }
+.ev-field  { background:var(--field-dim);  border-color:var(--field);  color:#6fcf97; }
+.ev-rest   { background:var(--rest-dim);   border-color:var(--rest);   color:var(--text-dim); }
+.ev-mtg    { background:var(--mtg-dim);    border-color:var(--mtg);    color:#fbbf24; }
+
+.footer { text-align:center; padding:12px; font-size:9px; color:var(--text-dim); border-top:1px solid var(--border); }
+
+.modal-overlay { display:none; position:fixed; inset:0; background:rgba(0,0,0,.6); z-index:200; justify-content:center; align-items:center; }
+.modal-overlay.open { display:flex; }
+.modal { background:var(--surface); border:1px solid var(--border); border-radius:10px; padding:20px 24px; width:340px; max-width:90vw; box-shadow:0 20px 60px rgba(0,0,0,.5); }
+.modal h3 { font-size:13px; font-weight:800; color:var(--pry); margin-bottom:14px; }
+.modal label { display:block; font-size:9px; color:var(--text-dim); margin-bottom:3px; margin-top:10px; }
+.modal input, .modal select { width:100%; padding:6px 8px; border-radius:4px; border:1px solid var(--border); background:var(--surface2); color:var(--text); font-family:'Noto Sans JP',sans-serif; font-size:11px; }
+.modal input:focus, .modal select:focus { outline:none; border-color:var(--pry); }
+.modal .time-row { display:grid; grid-template-columns:1fr auto 1fr; gap:6px; align-items:end; }
+.modal .time-row span { text-align:center; padding-bottom:6px; color:var(--text-dim); font-size:11px; }
+.modal .btn-row { display:flex; gap:8px; margin-top:16px; justify-content:flex-end; }
+.modal .btn-row button { font-family:'Noto Sans JP',sans-serif; font-size:10px; padding:6px 14px; border-radius:4px; border:1px solid var(--border); cursor:pointer; transition:all .15s; }
+.modal .btn-save { background:var(--pry); border-color:var(--pry); color:#111; font-weight:600; }
+.modal .btn-save:hover { opacity:.85; }
+.modal .btn-cancel { background:transparent; color:var(--text-dim); }
+.modal .btn-cancel:hover { border-color:var(--text-dim); }
+.modal .btn-delete { background:transparent; color:#e85d5d; border-color:#e85d5d; margin-right:auto; }
+.modal .btn-delete:hover { background:rgba(232,93,93,.15); }
+
+.toast { position:fixed; bottom:20px; right:20px; background:var(--surface2); border:1px solid var(--pry); border-radius:6px; padding:8px 16px; font-size:10px; color:var(--pry); z-index:300; opacity:0; transition:opacity .3s; pointer-events:none; }
+.toast.show { opacity:1; }
 </style>
 </head>
 <body>
+
 <div class="header">
   <h1>Zastin — 週間スケジュール</h1>
   <span class="ver">v10 — 2026/03/13</span>
+  <div class="actions">
+    <button onclick="addEvent()">＋ 追加</button>
+    <button class="danger" onclick="resetData()">リセット</button>
+  </div>
 </div>
-<div class="nav">
-  <a href="index.html">全体</a>
-  <a href="shuto.html">Shuto</a>
-  <a href="zastin.html" class="active">Zastin</a>
-  <a href="issei.html">Issei</a>
+
+<div class="nav" style="padding:8px 20px;display:flex;gap:12px;border-bottom:1px solid var(--border)">
+  <a href="index.html" style="font-size:10px;color:var(--text-dim);text-decoration:none;padding:3px 10px;border-radius:4px;border:1px solid var(--border)">全体</a>
+  <a href="shuto.html" style="font-size:10px;color:var(--text-dim);text-decoration:none;padding:3px 10px;border-radius:4px;border:1px solid var(--border)">Shuto</a>
+  <a href="zastin.html" style="font-size:10px;color:#e85d5d;text-decoration:none;padding:3px 10px;border-radius:4px;border:1px solid #e85d5d">Zastin</a>
+  <a href="issei.html" style="font-size:10px;color:var(--text-dim);text-decoration:none;padding:3px 10px;border-radius:4px;border:1px solid var(--border)">Issei</a>
 </div>
 <div class="legend">
   <div class="legend-item"><div class="legend-dot" style="background:var(--pry)"></div>PRY撮影</div>
@@ -39,12 +136,58 @@
   <div class="legend-item"><div class="legend-dot" style="background:var(--live)"></div>LIVE / 販売</div>
   <div class="legend-item"><div class="legend-dot" style="background:var(--field)"></div>動画納品（前日19:00締切）</div>
 </div>
-<div class="container"><div class="timetable" id="timetable"></div></div>
+
+<div class="container">
+  <div class="timetable" id="timetable"></div>
+</div>
+
 <div class="footer">v10 — 2026/03/13　Zastin個人スケジュール</div>
-<div class="tt" id="tt"><div class="tt-time" id="tt-time"></div><div class="tt-title" id="tt-title"></div><div class="tt-note" id="tt-note"></div></div>
+
+<div class="modal-overlay" id="modal-overlay">
+  <div class="modal">
+    <h3 id="modal-title">イベント編集</h3>
+    <label>タイトル</label>
+    <input type="text" id="ed-title">
+    <label>担当 / メモ</label>
+    <input type="text" id="ed-note">
+    <div class="time-row">
+      <div><label>開始</label><input type="time" id="ed-start" step="900"></div>
+      <span>〜</span>
+      <div><label>終了</label><input type="time" id="ed-end" step="900"></div>
+    </div>
+    <label>曜日</label>
+    <select id="ed-day">
+      <option value="0">月</option><option value="1">火</option><option value="2">水</option>
+      <option value="3">木</option><option value="4">金</option><option value="5">土</option><option value="6">日</option>
+    </select>
+    <label>カテゴリ</label>
+    <select id="ed-cat">
+      <option value="board">ボードワーク</option>
+      <option value="pry">PRY</option>
+      <option value="yt">UNI / サムネ</option>
+      <option value="design">個人ワーク</option>
+      <option value="mtg">外部MTG</option>
+      <option value="live">LIVE / 販売</option>
+      <option value="notify">配信・告知</option>
+      <option value="field">動画納品</option>
+      <option value="off">非稼働</option>
+      <option value="rest">休憩</option>
+    </select>
+    <div class="btn-row">
+      <button class="btn-delete" id="btn-delete" onclick="deleteEvent()">削除</button>
+      <button class="btn-cancel" onclick="closeModal()">キャンセル</button>
+      <button class="btn-save" onclick="saveEvent()">保存</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
 <script>
-const SH=8,EH=24,PX=38;
-const days=[
+const SH=8, EH=24, PX=38, SNAP=0.25;
+const CATS=['board','pry','yt','design','mtg','live','notify','field','off','rest'];
+const DAY_NAMES=['月','火','水','木','金','土','日'];
+const dayMeta=[
   {n:'月',th:'スチール/ムービー + UNI + LIVE',c:'var(--pry)'},
   {n:'火',th:'ボードワーク + PRY撮影',c:'var(--pry)'},
   {n:'水',th:'個人ワーク（リモート）',c:'var(--design)'},
@@ -53,8 +196,9 @@ const days=[
   {n:'土',th:'個人ワーク or イベント',c:'var(--design)'},
   {n:'日',th:'非稼働',c:'#555'},
 ];
-const evs=[
-  [ // Mon
+
+const DEFAULT_EVS = [
+  [
     {s:8,e:14,t:'スチール/ムービー撮影',u:'角田さん or 平永さん（隔週ローテ）',c:'pry'},
     {s:12,e:15,t:'UNIブレスト/台本',u:'with shuto',c:'yt',l:'50%'},
     {s:15,e:18,t:'UNI撮影',u:'with shuto',c:'yt'},
@@ -64,17 +208,17 @@ const evs=[
     {s:21,e:22,t:'🔴 PRY新作発売',u:'1h限定受注',c:'live',l:'50%'},
     {s:22.33,e:23,t:'ボード再設計&後片付け',u:'all',c:'board'},
   ],
-  [ // Tue
+  [
     {s:12,e:16,t:'ボードワーク',u:'all',c:'board'},
     {s:18,e:19,t:'🎬 水曜UNI動画 データ納品',u:'19:00締切 素材＋編集済',c:'field'},
     {s:18,e:21,t:'PRY撮影',u:'with shuto',c:'pry',l:'50%'},
   ],
-  [ // Wed
+  [
     {s:10,e:21,t:'個人ワーク（リモート）',u:'全サムネ作成',c:'design'},
     {s:18,e:19,t:'🎬 木曜UNI動画 データ納品',u:'19:00締切 素材＋編集済',c:'field',l:'50%'},
     {s:19,e:19.5,t:'📢 UNI動画更新（YT）',u:'',c:'notify',l:'50%'},
   ],
-  [ // Thu
+  [
     {s:8,e:9,t:'サムネチェック＆修正',u:'with shuto',c:'yt'},
     {s:9,e:10,t:'デザインボード＆チューニング',u:'all',c:'board'},
     {s:10,e:13,t:'SR MTG（対面）',u:'撮影&YTサムネ作成',c:'mtg'},
@@ -83,7 +227,7 @@ const evs=[
     {s:19,e:19.5,t:'📢 UNI動画更新（YT）',u:'',c:'notify'},
     {s:19,e:21,t:'全サムネ完成',u:'with shuto',c:'yt',l:'50%'},
   ],
-  [ // Fri
+  [
     {s:9,e:13,t:'PRYブレスト・構成確定',u:'with shuto',c:'pry'},
     {s:14,e:16.5,t:'UNI市場環境調査',u:'with shuto',c:'yt'},
     {s:16.5,e:18,t:'UNIブレスト/台本',u:'with shuto',c:'yt'},
@@ -92,12 +236,12 @@ const evs=[
     {s:19,e:19.5,t:'📢 PRY動画更新（YT）',u:'',c:'pry',l:'50%'},
     {s:20,e:20.5,t:'📢 PRY新作ページ公開',u:'EC',c:'notify'},
   ],
-  [ // Sat
+  [
     {s:10,e:21,t:'個人ワーク or イベント',u:'告知予約',c:'design'},
     {s:18,e:19,t:'🎬 日曜UNI動画 データ納品',u:'19:00締切 素材＋編集済',c:'field',l:'50%'},
     {s:19,e:19.5,t:'📢 UNI動画更新（YT）',u:'',c:'notify',l:'50%'},
   ],
-  [ // Sun
+  [
     {s:8,e:24,t:'非稼働',u:'予約配信のみ',c:'off'},
     {s:12,e:12.5,t:'📢 メルマガ配信',u:'予約',c:'notify',l:'50%'},
     {s:19,e:19.5,t:'📢 UNI動画更新（YT）',u:'予約',c:'notify',l:'50%'},
@@ -105,9 +249,285 @@ const evs=[
     {s:21,e:21.5,t:'📢 LINE配信',u:'予約',c:'notify',l:'50%'},
   ],
 ];
+
+const LS_KEY='pry-schedule-v10-zastin';
+let evs;
+let dragState=null;
+let editTarget=null;
+let dayBodies=[];
+
+function deepClone(o){return JSON.parse(JSON.stringify(o));}
+function loadData(){
+  const raw=localStorage.getItem(LS_KEY);
+  if(raw){try{evs=JSON.parse(raw);return;}catch(e){}}
+  evs=deepClone(DEFAULT_EVS);
+}
+function saveData(){localStorage.setItem(LS_KEY,JSON.stringify(evs));}
+function snap(v){return Math.round(v/SNAP)*SNAP;}
 function fmt(h){const hh=Math.floor(h),mm=Math.round((h%1)*60);return `${String(hh).padStart(2,'0')}:${String(mm).padStart(2,'0')}`;}
-function build(){const tbl=document.getElementById('timetable');const totalH=EH-SH;const tc=document.createElement('div');tc.className='time-col';tc.style.height=(totalH*PX+40)+'px';tc.style.marginTop='40px';for(let h=SH;h<=EH;h++){const l=document.createElement('div');l.className='time-label';l.style.top=(h-SH)*PX+'px';l.textContent=(h===24?'00':String(h).padStart(2,'0'))+':00';tc.appendChild(l);}tbl.appendChild(tc);days.forEach((d,di)=>{const col=document.createElement('div');col.className='day-col';const hdr=document.createElement('div');hdr.className='day-hdr';hdr.innerHTML=`<div class="day-name" style="color:${d.c}">${d.n}</div><div class="day-theme">${d.th}</div>`;col.appendChild(hdr);const body=document.createElement('div');body.className='day-body';body.style.height=totalH*PX+'px';for(let h=0;h<=totalH;h++){const ln=document.createElement('div');ln.className='hline';ln.style.top=h*PX+'px';body.appendChild(ln);}(evs[di]||[]).forEach(ev=>{const el=document.createElement('div');el.className=`ev ev-${ev.c}`;const top=(ev.s-SH)*PX;const height=Math.max((ev.e-ev.s)*PX-2,14);el.style.top=top+'px';el.style.height=height+'px';if(ev.o)el.style.opacity=ev.o;if(ev.l)el.style.left=ev.l;el.innerHTML=`<div class="ev-t">${ev.t}</div>${height>20?`<div class="ev-s">${ev.u}</div>`:''}`;el.addEventListener('mouseenter',e=>{const tt=document.getElementById('tt');document.getElementById('tt-time').textContent=`${fmt(ev.s)} — ${fmt(ev.e)}`;document.getElementById('tt-title').textContent=ev.t.replace(/[📢🔴]\s?/g,'');document.getElementById('tt-note').textContent=ev.u||'';tt.style.display='block';tt.style.left=(e.clientX+14)+'px';tt.style.top=(e.clientY-8)+'px';});el.addEventListener('mouseleave',()=>{document.getElementById('tt').style.display='none';});el.addEventListener('mousemove',e=>{const tt=document.getElementById('tt');tt.style.left=(e.clientX+14)+'px';tt.style.top=(e.clientY-8)+'px';});body.appendChild(el);});col.appendChild(body);tbl.appendChild(col);});}
-build();
+function timeToH(s){const[h,m]=s.split(':').map(Number);return h+m/60;}
+function hToTime(h){return fmt(h);}
+function toast(msg){const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),1800);}
+
+function render(){
+  const tbl=document.getElementById('timetable');
+  tbl.innerHTML='';
+  dayBodies=[];
+  const totalH=EH-SH;
+
+  const tc=document.createElement('div');
+  tc.className='time-col';
+  tc.style.height=(totalH*PX+40)+'px';
+  tc.style.marginTop='40px';
+  for(let h=SH;h<=EH;h++){
+    const l=document.createElement('div');
+    l.className='time-label';
+    l.style.top=(h-SH)*PX+'px';
+    l.textContent=(h===24?'00':String(h).padStart(2,'0'))+':00';
+    tc.appendChild(l);
+  }
+  tbl.appendChild(tc);
+
+  dayMeta.forEach((d,di)=>{
+    const col=document.createElement('div');
+    col.className='day-col';
+    col.dataset.day=di;
+
+    const hdr=document.createElement('div');
+    hdr.className='day-hdr';
+    hdr.innerHTML=`<div class="day-name" style="color:${d.c}">${DAY_NAMES[di]}</div><div class="day-theme">${d.th}</div>`;
+    col.appendChild(hdr);
+
+    const body=document.createElement('div');
+    body.className='day-body';
+    body.style.height=totalH*PX+'px';
+    body.dataset.day=di;
+
+    for(let h=0;h<=totalH;h++){
+      const ln=document.createElement('div');
+      ln.className='hline';
+      ln.style.top=h*PX+'px';
+      body.appendChild(ln);
+    }
+
+    (evs[di]||[]).forEach((ev,ei)=>{
+      const el=mkEvent(ev,di,ei);
+      body.appendChild(el);
+    });
+
+    col.appendChild(body);
+    tbl.appendChild(col);
+    dayBodies.push(body);
+  });
+}
+
+function mkEvent(ev,di,ei){
+  const el=document.createElement('div');
+  el.className=`ev ev-${ev.c}`;
+  const top=(ev.s-SH)*PX;
+  const height=Math.max((ev.e-ev.s)*PX-2,14);
+  el.style.top=top+'px';
+  el.style.height=height+'px';
+  if(ev.l)el.style.left=ev.l;
+  el.dataset.day=di;
+  el.dataset.idx=ei;
+  el.innerHTML=`<div class="ev-t">${ev.t}</div>${height>20?`<div class="ev-s">${ev.u||''}</div>`:''}<div class="resize-handle"></div>`;
+
+  el.addEventListener('mousedown',e=>{
+    if(e.target.classList.contains('resize-handle')){
+      startResize(e,di,ei,el);
+    } else {
+      startDrag(e,di,ei,el);
+    }
+  });
+
+  el.addEventListener('dblclick',e=>{
+    e.preventDefault();
+    e.stopPropagation();
+    openModal(di,ei);
+  });
+
+  return el;
+}
+
+function startDrag(e,di,ei,el){
+  e.preventDefault();
+  const body=el.parentElement;
+  const rect=body.getBoundingClientRect();
+  const offsetY=e.clientY-el.getBoundingClientRect().top;
+  const ev=evs[di][ei];
+  const dur=ev.e-ev.s;
+  let clickTime=Date.now();
+
+  el.classList.add('dragging');
+  dragState={mode:'drag',di,ei,el,body,offsetY,dur,startDi:di,startS:ev.s,moved:false};
+
+  function onMove(e2){
+    dragState.moved=true;
+    const targetBody=getBodyUnder(e2.clientX);
+    const newDi=targetBody?Number(targetBody.dataset.day):dragState.di;
+    const bRect=(targetBody||body).getBoundingClientRect();
+    const y=e2.clientY-bRect.top-offsetY;
+    let newS=snap(SH+y/PX);
+    newS=Math.max(SH,Math.min(EH-dur,newS));
+    el.style.top=((newS-SH)*PX)+'px';
+    dragState.newS=newS;
+    dragState.newDi=newDi;
+  }
+  function onUp(){
+    document.removeEventListener('mousemove',onMove);
+    document.removeEventListener('mouseup',onUp);
+    el.classList.remove('dragging');
+
+    if(!dragState.moved && Date.now()-clickTime<300){
+      openModal(dragState.startDi,ei);
+      dragState=null;
+      return;
+    }
+
+    if(dragState.newS!==undefined){
+      const ev=evs[dragState.startDi][ei];
+      if(dragState.newDi!==dragState.startDi){
+        evs[dragState.startDi].splice(ei,1);
+        ev.s=dragState.newS;
+        ev.e=dragState.newS+dur;
+        evs[dragState.newDi].push(ev);
+      } else {
+        ev.s=dragState.newS;
+        ev.e=dragState.newS+dur;
+      }
+      saveData();
+      render();
+      toast('移動しました');
+    }
+    dragState=null;
+  }
+  document.addEventListener('mousemove',onMove);
+  document.addEventListener('mouseup',onUp);
+}
+
+function startResize(e,di,ei,el){
+  e.preventDefault();
+  e.stopPropagation();
+  const ev=evs[di][ei];
+
+  function onMove(e2){
+    const bRect=el.parentElement.getBoundingClientRect();
+    const y=e2.clientY-bRect.top;
+    let newE=snap(SH+y/PX);
+    newE=Math.max(ev.s+SNAP,Math.min(EH,newE));
+    const height=Math.max((newE-ev.s)*PX-2,14);
+    el.style.height=height+'px';
+    ev.e=newE;
+  }
+  function onUp(){
+    document.removeEventListener('mousemove',onMove);
+    document.removeEventListener('mouseup',onUp);
+    saveData();
+    render();
+    toast('リサイズしました');
+  }
+  document.addEventListener('mousemove',onMove);
+  document.addEventListener('mouseup',onUp);
+}
+
+function getBodyUnder(x){
+  for(const b of dayBodies){
+    const r=b.getBoundingClientRect();
+    if(x>=r.left&&x<=r.right)return b;
+  }
+  return null;
+}
+
+function openModal(di,ei){
+  editTarget={di,ei};
+  const ev=evs[di][ei];
+  document.getElementById('ed-title').value=ev.t.replace(/[📢🔴🎬]\s?/g,'');
+  document.getElementById('ed-note').value=ev.u||'';
+  document.getElementById('ed-start').value=hToTime(ev.s);
+  document.getElementById('ed-end').value=hToTime(ev.e);
+  document.getElementById('ed-day').value=di;
+  document.getElementById('ed-cat').value=ev.c;
+  document.getElementById('modal-title').textContent='イベント編集';
+  document.getElementById('btn-delete').style.display='';
+  document.getElementById('modal-overlay').classList.add('open');
+}
+
+function closeModal(){
+  document.getElementById('modal-overlay').classList.remove('open');
+  editTarget=null;
+}
+
+function saveEvent(){
+  const title=document.getElementById('ed-title').value.trim();
+  if(!title){toast('タイトルを入力');return;}
+  const note=document.getElementById('ed-note').value;
+  const s=timeToH(document.getElementById('ed-start').value);
+  const e=timeToH(document.getElementById('ed-end').value);
+  const newDi=Number(document.getElementById('ed-day').value);
+  const cat=document.getElementById('ed-cat').value;
+  if(e<=s){toast('終了は開始より後に');return;}
+
+  if(editTarget){
+    const {di,ei}=editTarget;
+    if(ei===-1){
+      evs[newDi].push({s,e,t:title,u:note,c:cat});
+    } else {
+      const ev=evs[di][ei];
+      ev.t=title;ev.u=note;ev.s=s;ev.e=e;ev.c=cat;
+      if(newDi!==di){
+        evs[di].splice(ei,1);
+        evs[newDi].push(ev);
+      }
+    }
+  }
+  saveData();
+  render();
+  closeModal();
+  toast('保存しました');
+}
+
+function deleteEvent(){
+  if(!editTarget||editTarget.ei===-1)return;
+  if(!confirm('このイベントを削除しますか？'))return;
+  const{di,ei}=editTarget;
+  evs[di].splice(ei,1);
+  saveData();
+  render();
+  closeModal();
+  toast('削除しました');
+}
+
+function addEvent(){
+  editTarget={di:0,ei:-1};
+  document.getElementById('ed-title').value='';
+  document.getElementById('ed-note').value='';
+  document.getElementById('ed-start').value='09:00';
+  document.getElementById('ed-end').value='10:00';
+  document.getElementById('ed-day').value='0';
+  document.getElementById('ed-cat').value='pry';
+  document.getElementById('modal-title').textContent='イベント追加';
+  document.getElementById('btn-delete').style.display='none';
+  document.getElementById('modal-overlay').classList.add('open');
+}
+
+function resetData(){
+  if(!confirm('全ての変更をリセットして初期状態に戻しますか？'))return;
+  localStorage.removeItem(LS_KEY);
+  loadData();
+  render();
+  toast('リセットしました');
+}
+
+document.getElementById('modal-overlay').addEventListener('click',e=>{
+  if(e.target===e.currentTarget)closeModal();
+});
+document.addEventListener('keydown',e=>{
+  if(e.key==='Escape')closeModal();
+});
+
+loadData();
+render();
 </script>
 </body>
 </html>
