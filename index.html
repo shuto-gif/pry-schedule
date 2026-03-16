@@ -67,6 +67,7 @@ body { background: var(--bg); color: var(--text); font-family: 'Noto Sans JP', s
 .floor-tag-cabinet { background:rgba(168,130,255,.15); color:#b8a0ff; border:1px solid rgba(168,130,255,.25); }
 .floor-tag-remote { background:rgba(100,200,140,.12); color:#6fcf97; border:1px solid rgba(100,200,140,.2); }
 .floor-tag-online { background:rgba(255,255,255,.06); color:#777; border:1px solid rgba(255,255,255,.1); }
+.floor-tag-fieldwork { background:rgba(255,160,80,.15); color:#f0a050; border:1px solid rgba(255,160,80,.25); }
 
 .container { padding:10px 8px 16px; overflow-x:auto; }
 
@@ -177,6 +178,7 @@ body { background: var(--bg); color: var(--text); font-family: 'Noto Sans JP', s
   <span class="floor-tag floor-tag-cabinet active" data-floor="cabinet" onclick="toggleFloor(this)">5F CABINET</span>
   <span class="floor-tag floor-tag-remote active" data-floor="remote" onclick="toggleFloor(this)">REMOTE</span>
   <span class="floor-tag floor-tag-online active" data-floor="online" onclick="toggleFloor(this)">ONLINE</span>
+  <span class="floor-tag floor-tag-fieldwork active" data-floor="fieldwork" onclick="toggleFloor(this)">FIELDWORK</span>
 </div>
 
 <div class="container">
@@ -251,6 +253,7 @@ body { background: var(--bg); color: var(--text); font-family: 'Noto Sans JP', s
       <option value="cabinet">5F CABINET</option>
       <option value="remote">REMOTE</option>
       <option value="online">ONLINE</option>
+      <option value="fieldwork">FIELDWORK</option>
     </select>
     <div class="btn-row">
       <button class="btn-delete" id="btn-delete" onclick="deleteEvent()">削除</button>
@@ -275,7 +278,7 @@ const dayMeta=[
   {th:'非稼働',c:'#555'},
 ];
 
-const PLACE_LABELS={studio:'4F',atelier:'5F',cabinet:'CAB',remote:'REM',online:'ONL'};
+const PLACE_LABELS={studio:'4F',atelier:'5F',cabinet:'CAB',remote:'REM',online:'ONL',fieldwork:'FW'};
 
 const PAGE_FILTER = null;
 
@@ -346,7 +349,7 @@ let evs;
 let dragState=null;
 let editTarget=null;
 let dayBodies=[];
-let activeFloors=new Set(['studio','atelier','cabinet','remote','online']);
+let activeFloors=new Set(['studio','atelier','cabinet','remote','online','fieldwork']);
 
 function deepClone(o){return JSON.parse(JSON.stringify(o));}
 
@@ -375,7 +378,7 @@ function getVisible(di){
       const w=ev.w||['all'];
       if(!w.includes('all')&&!w.includes(PAGE_FILTER))return false;
     }
-    if(activeFloors.size<5){
+    if(activeFloors.size<6){
       const p=ev.p||'atelier';
       if(!activeFloors.has(p))return false;
     }
@@ -386,12 +389,13 @@ function getVisible(di){
 function toggleFloor(el){
   const f=el.dataset.floor;
   const allTags=document.querySelectorAll('.floor-tag[data-floor]');
-  const allActive=activeFloors.size===5;
+  const ALL_FLOORS=['studio','atelier','cabinet','remote','online','fieldwork'];
+  const allActive=activeFloors.size===ALL_FLOORS.length;
   if(allActive){
     activeFloors=new Set([f]);
     allTags.forEach(t=>t.classList.toggle('active',t.dataset.floor===f));
   } else if(activeFloors.has(f)&&activeFloors.size===1){
-    activeFloors=new Set(['studio','atelier','cabinet','remote','online']);
+    activeFloors=new Set(ALL_FLOORS);
     allTags.forEach(t=>t.classList.add('active'));
   } else if(activeFloors.has(f)){
     activeFloors.delete(f);
