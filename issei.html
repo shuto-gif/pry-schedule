@@ -585,20 +585,11 @@ function saveEvent(){
 
   if(editTarget){
     const {di,ei}=editTarget;
-    if(ei===-1){
-      evs[newDi].push({...newEv});
-    } else {
-      const ev=evs[di][ei];
-      ev.t=title;ev.u=note;ev.s=s;ev.e=e;ev.c=cat;
-      if(newDi!==di){
-        evs[di].splice(ei,1);
-        evs[newDi].push(ev);
-      }
-    }
+    if(ei!==-1) evs[di].splice(ei,1);
+    evs[newDi].push({...newEv});
   }
   saveData();
-  let synced=0;
-  if(editTarget&&editTarget.ei===-1) synced=syncToOtherCalendars(newEv,newDi,ALL_LS[CUR_PAGE]);
+  const synced=syncToOtherCalendars(newEv,newDi,ALL_LS[CUR_PAGE]);
   render();
   closeModal();
   toast(synced>0?`保存（${synced}件同期）`:'保存しました');
