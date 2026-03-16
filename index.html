@@ -453,7 +453,13 @@ function toast(msg){const t=document.getElementById('toast');t.textContent=msg;t
 function layoutDay(dayEvs){
   if(!dayEvs||!dayEvs.length)return;
   dayEvs.forEach(ev=>{ev._col=0;ev._tc=1;});
-  const idx=dayEvs.map((_,i)=>i).sort((a,b)=>dayEvs[a].s-dayEvs[b].s||(dayEvs[b].e-dayEvs[b].s)-(dayEvs[a].e-dayEvs[a].s));
+  const idx=dayEvs.map((_,i)=>i).sort((a,b)=>{
+    const sa=dayEvs[a].s,sb=dayEvs[b].s;
+    if(sa!==sb)return sa-sb;
+    const oa=(dayEvs[a].ord||0),ob=(dayEvs[b].ord||0);
+    if(oa!==ob)return oa-ob;
+    return(dayEvs[b].e-dayEvs[b].s)-(dayEvs[a].e-dayEvs[a].s);
+  });
   const ends=[];
   idx.forEach(i=>{
     const ev=dayEvs[i];let placed=false;
@@ -594,17 +600,22 @@ function mkEvent(ev,di,ei){
   return el;
 }
 
+function getOverlaps(di,ev){
+  return evs[di].filter(o=>o!==ev&&o.s<ev.e&&o.e>ev.s).sort((a,b)=>(a.ord||0)-(b.ord||0));
+}
+
 function startDrag(e,di,ei,el){
   e.preventDefault();
   const body=el.parentElement;
   const rect=body.getBoundingClientRect();
   const offsetY=e.clientY-el.getBoundingClientRect().top;
+  const startX=e.clientX;
   const ev=evs[di][ei];
   const dur=ev.e-ev.s;
   let clickTime=Date.now();
 
   el.classList.add('dragging');
-  dragState={mode:'drag',di,ei,el,body,offsetY,dur,startDi:di,startS:ev.s,moved:false};
+  dragState={mode:'drag',di,ei,el,body,offsetY,dur,startDi:di,startS:ev.s,moved:false,startX};
 
   function onMove(e2){
     dragState.moved=true;
@@ -617,6 +628,7 @@ function startDrag(e,di,ei,el){
     el.style.top=((newS-SH)*PX)+'px';
     dragState.newS=newS;
     dragState.newDi=newDi;
+    dragState.dx=e2.clientX-startX;
   }
   function onUp(){
     document.removeEventListener('mousemove',onMove);
@@ -629,9 +641,37 @@ function startDrag(e,di,ei,el){
       return;
     }
 
+    const dx=dragState.dx||0;
+    const movedY=dragState.newS!==undefined&&dragState.newS!==dragState.startS;
+    const movedDay=dragState.newDi!==undefined&&dragState.newDi!==dragState.startDi;
+
+    if(Math.abs(dx)>30&&!movedDay&&!movedY){
+      const curEv=evs[di][ei];
+      const siblings=getOverlaps(di,curEv);
+      if(siblings.length>0){
+        const all=[curEv,...siblings].sort((a,b)=>(a.ord||0)-(b.ord||0));
+        const curIdx=all.indexOf(curEv);
+        const swapIdx=dx>0?curIdx+1:curIdx-1;
+        if(swapIdx>=0&&swapIdx<all.length){
+          const tmp=all[curIdx].ord||0;
+          all[curIdx].ord=all[swapIdx].ord||0;
+          all[swapIdx].ord=tmp;
+          if(all[curIdx].ord===all[swapIdx].ord){
+            all[curIdx].ord=swapIdx;
+            all[swapIdx].ord=curIdx;
+          }
+          saveData();
+          render();
+          toast('配置を変更しました');
+          dragState=null;
+          return;
+        }
+      }
+    }
+
     if(dragState.newS!==undefined){
       const ev=evs[dragState.startDi][ei];
-      if(dragState.newDi!==dragState.startDi){
+      if(movedDay){
         evs[dragState.startDi].splice(ei,1);
         ev.s=dragState.newS;
         ev.e=dragState.newS+dur;
