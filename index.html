@@ -18,8 +18,8 @@
   --board-dim: rgba(144,128,216,0.2);
   --design: #7868b8;
   --design-dim: rgba(120,104,184,0.18);
-  --pry-c: #5b9def;
-  --pry-dim: rgba(91,157,239,0.18);
+  --pry-c: #50c8e0;
+  --pry-dim: rgba(80,200,224,0.18);
   --mtg: #4a80d0;
   --mtg-dim: rgba(74,128,208,0.18);
   --yt: #d0b830;
@@ -69,7 +69,7 @@ body { background: var(--bg); color: var(--text); font-family: 'Noto Sans JP', s
 
 .ftag-board { background:var(--board-dim); color:#c0b4f0; border-color:rgba(144,128,216,.35); }
 .ftag-design { background:var(--design-dim); color:#a898d0; border-color:rgba(120,104,184,.3); }
-.ftag-pry { background:var(--pry-dim); color:#90c0f8; border-color:rgba(91,157,239,.3); }
+.ftag-pry { background:var(--pry-dim); color:#60d0e8; border-color:rgba(80,200,224,.3); }
 .ftag-mtg { background:var(--mtg-dim); color:#80b0e8; border-color:rgba(74,128,208,.3); }
 .ftag-yt { background:var(--yt-dim); color:#e0d070; border-color:rgba(208,184,48,.3); }
 .ftag-live { background:var(--live-dim); color:#e8c050; border-color:rgba(212,160,32,.3); }
@@ -100,7 +100,7 @@ body { background: var(--bg); color: var(--text); font-family: 'Noto Sans JP', s
 
 .ev-board  { background:var(--board-dim);  border-color:var(--board);  color:#c0b4f0; }
 .ev-design { background:var(--design-dim); border-color:var(--design); color:#a898d0; }
-.ev-pry    { background:var(--pry-dim);    border-color:var(--pry-c);  color:#90c0f8; }
+.ev-pry    { background:var(--pry-dim);    border-color:var(--pry-c);  color:#60d0e8; }
 .ev-mtg    { background:var(--mtg-dim);    border-color:var(--mtg);    color:#80b0e8; }
 .ev-yt     { background:var(--yt-dim);     border-color:var(--yt);     color:#e0d070; }
 .ev-live   { background:var(--live-dim);   border-color:var(--live);   color:#e8c050; }
@@ -184,9 +184,9 @@ body { background: var(--bg); color: var(--text); font-family: 'Noto Sans JP', s
   <span class="filter-label">TASK:</span>
   <span class="ftag ftag-board active" data-task="board" onclick="toggleTask(this)">ボードワーク</span>
   <span class="ftag ftag-design active" data-task="design" onclick="toggleTask(this)">個人ワーク</span>
-  <span class="ftag ftag-pry active" data-task="pry" onclick="toggleTask(this)">PRY</span>
+  <span class="ftag ftag-pry active" data-task="pry" onclick="toggleTask(this)">デザイン</span>
   <span class="ftag ftag-mtg active" data-task="mtg" onclick="toggleTask(this)">外部MTG</span>
-  <span class="ftag ftag-yt active" data-task="yt" onclick="toggleTask(this)">UNI</span>
+  <span class="ftag ftag-yt active" data-task="yt" onclick="toggleTask(this)">撮影</span>
   <span class="ftag ftag-live active" data-task="live" onclick="toggleTask(this)">LIVE/販売</span>
   <span class="ftag ftag-notify active" data-task="notify" onclick="toggleTask(this)">配信・告知</span>
   <span class="ftag ftag-field active" data-task="field" onclick="toggleTask(this)">動画納品</span>
@@ -249,9 +249,9 @@ body { background: var(--bg); color: var(--text); font-family: 'Noto Sans JP', s
     <select id="ed-cat">
       <option value="board">ボードワーク</option>
       <option value="design">個人ワーク</option>
-      <option value="pry">PRY</option>
+      <option value="pry">デザイン</option>
       <option value="mtg">外部MTG</option>
-      <option value="yt">UNI</option>
+      <option value="yt">撮影</option>
       <option value="live">LIVE / 販売</option>
       <option value="notify">配信・告知</option>
       <option value="field">動画納品</option>
