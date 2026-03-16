@@ -316,6 +316,7 @@ function loadData(){
   const raw=localStorage.getItem(LS_KEY);
   if(raw){try{evs=JSON.parse(raw);return;}catch(e){}}
   evs=deepClone(DEFAULT_EVS);
+  saveData();
 }
 function saveData(){localStorage.setItem(LS_KEY,JSON.stringify(evs));}
 function snap(v){return Math.round(v/SNAP)*SNAP;}
@@ -600,7 +601,7 @@ function syncToOtherCalendars(newEv,newDi,skipKey){
     const raw=localStorage.getItem(key);
     let data;
     try{data=raw?JSON.parse(raw):null;}catch(ex){data=null;}
-    if(!data){data=[[],[],[],[],[],[],[]]}
+    if(!data)return;
     if(!data[newDi])data[newDi]=[];
     data[newDi].push({...newEv});
     localStorage.setItem(key,JSON.stringify(data));
