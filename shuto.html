@@ -60,14 +60,14 @@ body { background: var(--bg); color: var(--text); font-family: 'Noto Sans JP', s
 .ftag:hover { opacity:.85; }
 .ftag.active { opacity:1; box-shadow:0 0 0 1px currentColor; }
 
-.ftag-all { background:rgba(255,255,255,.08); color:#aaa; border-color:rgba(255,255,255,.15); }
-.ftag-shuto { background:rgba(201,168,76,.18); color:#c9a84c; border-color:rgba(201,168,76,.25); }
-.ftag-zastin { background:rgba(232,93,93,.15); color:#e87070; border-color:rgba(232,93,93,.2); }
-.ftag-issei { background:rgba(91,141,239,.15); color:#7ba8f5; border-color:rgba(91,141,239,.2); }
+.ftag-all { background:rgba(255,255,255,.08); color:#999; border-color:rgba(255,255,255,.15); }
+.ftag-shuto { background:rgba(255,255,255,.1); color:#ddd; border-color:rgba(255,255,255,.25); }
+.ftag-zastin { background:rgba(220,60,60,.15); color:#e06060; border-color:rgba(220,60,60,.25); }
+.ftag-issei { background:rgba(70,130,230,.15); color:#6aa0f0; border-color:rgba(70,130,230,.25); }
 
-.ftag-studio { background:rgba(201,168,76,.2); color:#c9a84c; border-color:rgba(201,168,76,.3); }
-.ftag-atelier { background:rgba(91,141,239,.15); color:#7ba8f5; border-color:rgba(91,141,239,.25); }
-.ftag-cabinet { background:rgba(168,130,255,.15); color:#b8a0ff; border-color:rgba(168,130,255,.25); }
+.ftag-studio { background:rgba(230,200,60,.18); color:#e0c840; border-color:rgba(230,200,60,.3); }
+.ftag-atelier { background:rgba(70,130,230,.15); color:#6aa0f0; border-color:rgba(70,130,230,.25); }
+.ftag-cabinet { background:rgba(255,255,255,.1); color:#ddd; border-color:rgba(255,255,255,.25); }
 .ftag-remote { background:rgba(100,200,140,.12); color:#6fcf97; border-color:rgba(100,200,140,.2); }
 .ftag-online { background:rgba(255,255,255,.06); color:#777; border-color:rgba(255,255,255,.1); }
 .ftag-fieldwork { background:rgba(255,160,80,.15); color:#f0a050; border-color:rgba(255,160,80,.25); }
@@ -146,7 +146,6 @@ body { background: var(--bg); color: var(--text); font-family: 'Noto Sans JP', s
 </style>
 </head>
 <body>
-
 <div class="header">
   <h1>Shuto — 週間スケジュール</h1>
   <span class="ver">v10 — 2026/03/16　Shuto個人スケジュール</span>
@@ -155,11 +154,9 @@ body { background: var(--bg); color: var(--text); font-family: 'Noto Sans JP', s
     <button class="danger" onclick="resetData()">リセット</button>
   </div>
 </div>
-
 <div class="nav">
   <a href="index.html">全体</a><a href="shuto.html" class="active">Shuto</a><a href="zastin.html">Zastin</a><a href="issei.html">Issei</a>
 </div>
-
 <div class="filter-bar" id="filter-member">
   <span class="filter-label">MEMBER:</span>
   <span class="ftag ftag-all active" data-member="all" onclick="toggleMember(this)">ALL</span>
@@ -167,7 +164,6 @@ body { background: var(--bg); color: var(--text); font-family: 'Noto Sans JP', s
   <span class="ftag ftag-zastin active" data-member="zastin" onclick="toggleMember(this)">ZASTIN</span>
   <span class="ftag ftag-issei active" data-member="issei" onclick="toggleMember(this)">ISSEI</span>
 </div>
-
 <div class="filter-bar" id="filter-floor">
   <span class="filter-label">FLOOR:</span>
   <span class="ftag ftag-studio active" data-floor="studio" onclick="toggleFloor(this)">4F STUDIO</span>
@@ -177,7 +173,6 @@ body { background: var(--bg); color: var(--text); font-family: 'Noto Sans JP', s
   <span class="ftag ftag-online active" data-floor="online" onclick="toggleFloor(this)">ONLINE</span>
   <span class="ftag ftag-fieldwork active" data-floor="fieldwork" onclick="toggleFloor(this)">FIELDWORK</span>
 </div>
-
 <div class="filter-bar" id="filter-task">
   <span class="filter-label">TASK:</span>
   <span class="ftag ftag-board active" data-task="board" onclick="toggleTask(this)">ボードワーク</span>
@@ -190,66 +185,28 @@ body { background: var(--bg); color: var(--text); font-family: 'Noto Sans JP', s
   <span class="ftag ftag-field active" data-task="field" onclick="toggleTask(this)">動画納品</span>
   <span class="ftag ftag-off active" data-task="off" onclick="toggleTask(this)">非稼働</span>
 </div>
-
 <div class="container">
   <div class="timetable" id="timetable"></div>
 </div>
-
 <div class="modal-overlay" id="modal-overlay" onclick="closeModal()"></div>
 <div class="modal" id="modal">
   <div class="modal-content">
     <h3 id="modal-title">イベント編集</h3>
-    <label>タイトル</label>
-    <input id="ed-title" placeholder="イベント名">
-    <label>備考</label>
-    <input id="ed-note" placeholder="備考（サブテキスト）">
-    <div class="time-row">
-      <div><label>開始</label><input id="ed-start" type="time"></div>
-      <div><label>終了</label><input id="ed-end" type="time"></div>
-    </div>
+    <label>タイトル</label><input id="ed-title" placeholder="イベント名">
+    <label>備考</label><input id="ed-note" placeholder="備考（サブテキスト）">
+    <div class="time-row"><div><label>開始</label><input id="ed-start" type="time"></div><div><label>終了</label><input id="ed-end" type="time"></div></div>
     <label>曜日</label>
-    <select id="ed-day">
-      <option value="0">月</option><option value="1">火</option><option value="2">水</option>
-      <option value="3">木</option><option value="4">金</option><option value="5">土</option><option value="6">日</option>
-    </select>
+    <select id="ed-day"><option value="0">月</option><option value="1">火</option><option value="2">水</option><option value="3">木</option><option value="4">金</option><option value="5">土</option><option value="6">日</option></select>
     <label>カテゴリ</label>
-    <select id="ed-cat">
-      <option value="board">ボードワーク</option>
-      <option value="pry">PRY</option>
-      <option value="yt">UNI</option>
-      <option value="design">個人ワーク</option>
-      <option value="mtg">外部MTG</option>
-      <option value="live">LIVE / 販売</option>
-      <option value="notify">配信・告知</option>
-      <option value="field">動画納品</option>
-      <option value="off">非稼働</option>
-    </select>
+    <select id="ed-cat"><option value="board">ボードワーク</option><option value="pry">PRY</option><option value="yt">UNI</option><option value="design">個人ワーク</option><option value="mtg">外部MTG</option><option value="live">LIVE / 販売</option><option value="notify">配信・告知</option><option value="field">動画納品</option><option value="off">非稼働</option></select>
     <label>担当</label>
-    <div class="who-checks" id="who-checks">
-      <label><input type="checkbox" value="all" onchange="whoAllToggle(this)"> ALL</label>
-      <label><input type="checkbox" value="shuto"> Shuto</label>
-      <label><input type="checkbox" value="zastin"> Zastin</label>
-      <label><input type="checkbox" value="issei"> Issei</label>
-    </div>
+    <div class="who-checks" id="who-checks"><label><input type="checkbox" value="all" onchange="whoAllToggle(this)"> ALL</label><label><input type="checkbox" value="shuto"> Shuto</label><label><input type="checkbox" value="zastin"> Zastin</label><label><input type="checkbox" value="issei"> Issei</label></div>
     <label>場所</label>
-    <select id="ed-place">
-      <option value="studio">4F STUDIO</option>
-      <option value="atelier">5F ATELIER</option>
-      <option value="cabinet">5F CABINET</option>
-      <option value="remote">REMOTE</option>
-      <option value="online">ONLINE</option>
-      <option value="fieldwork">FIELDWORK</option>
-    </select>
-    <div class="btn-row">
-      <button class="btn-delete" id="btn-delete" onclick="deleteEvent()">削除</button>
-      <button class="btn-cancel" onclick="closeModal()">キャンセル</button>
-      <button class="btn-save" onclick="saveEvent()">保存</button>
-    </div>
+    <select id="ed-place"><option value="studio">4F STUDIO</option><option value="atelier">5F ATELIER</option><option value="cabinet">5F CABINET</option><option value="remote">REMOTE</option><option value="online">ONLINE</option><option value="fieldwork">FIELDWORK</option></select>
+    <div class="btn-row"><button class="btn-delete" id="btn-delete" onclick="deleteEvent()">削除</button><button class="btn-cancel" onclick="closeModal()">キャンセル</button><button class="btn-save" onclick="saveEvent()">保存</button></div>
   </div>
 </div>
-
 <div class="toast" id="toast"></div>
-
 <script>
 const SH=8, EH=24, PX=38, SNAP=0.25;
 const DAY_NAMES=['月','火','水','木','金','土','日'];
