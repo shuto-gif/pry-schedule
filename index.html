@@ -49,10 +49,6 @@ body { background: var(--bg); color: var(--text); font-family: 'Noto Sans JP', s
 .header .actions button:hover { border-color:var(--pry); color:var(--pry); }
 .header .actions button.danger:hover { border-color:#e85d5d; color:#e85d5d; }
 
-.nav { padding:8px 20px; display:flex; gap:12px; border-bottom:1px solid var(--border); }
-.nav a { font-size:10px; text-decoration:none; padding:3px 10px; border-radius:4px; border:1px solid var(--border); color:var(--text-dim); }
-.nav a.active { color:var(--pry); border-color:var(--pry); }
-
 .filter-bar { padding:6px 20px; display:flex; gap:10px; flex-wrap:wrap; border-bottom:1px solid var(--border); align-items:center; }
 .filter-label { font-family:'DM Mono',monospace; font-size:8px; color:var(--text-dim); font-weight:600; letter-spacing:.06em; min-width:56px; }
 .ftag { font-family:'DM Mono',monospace; font-size:7px; padding:2px 6px; border-radius:2px; letter-spacing:.04em; cursor:pointer; transition:all .15s; opacity:.45; border:1px solid transparent; }
@@ -165,13 +161,6 @@ body { background: var(--bg); color: var(--text); font-family: 'Noto Sans JP', s
     <button onclick="addEvent()">＋ 追加</button>
     <button class="danger" onclick="resetData()">リセット</button>
   </div>
-</div>
-
-<div class="nav">
-  <a href="index.html" class="active">全体</a>
-  <a href="shuto.html">Shuto</a>
-  <a href="zastin.html">Zastin</a>
-  <a href="issei.html">Issei</a>
 </div>
 
 <div class="filter-bar" id="filter-member">
