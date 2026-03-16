@@ -135,7 +135,7 @@ body { background: var(--bg); color: var(--text); font-family: 'Noto Sans JP', s
 .toast { position:fixed; bottom:20px; right:20px; background:var(--surface2); border:1px solid var(--pry); border-radius:6px; padding:8px 16px; font-size:10px; color:var(--pry); z-index:300; opacity:0; transition:opacity .3s; pointer-events:none; }
 .toast.show { opacity:1; }
 </style></head><body>
-<div class="header"><h1>Zastin — 週間スケジュール</h1><span class="ver">v10 — 2026/03/16　Zastin個人スケジュール</span><div class="actions"><button onclick="addEvent()">＋ 追加</button><button class="danger" onclick="resetData()">リセット</button></div></div>
+<div class="header"><h1>Zastin — 週間スケジュール</h1><span class="ver">v10 — 2026/03/16　Zastin個人スケジュール</span><div class="actions"><button onclick="addEvent()">＋ 追加</button><button onclick="overwriteDefault()">保存</button><button class="danger" onclick="resetData()">リセット</button></div></div>
 <div class="filter-bar" id="filter-member">
   <span class="filter-label">MEMBER:</span>
   <span class="ftag ftag-all active" data-member="all" onclick="toggleMember(this)">ALL</span>
@@ -658,10 +658,23 @@ function addEvent(){
   document.getElementById('modal-overlay').classList.add('open');
 }
 
+function overwriteDefault(){
+  if(!confirm('現在のスケジュールを保存しますか？（リセット時にこの状態に戻ります）'))return;
+  localStorage.setItem(LS_KEY+'-saved',JSON.stringify(evs));
+  toast('保存しました');
+}
+
 function resetData(){
-  if(!confirm('全ての変更をリセットして初期状態に戻しますか？'))return;
-  localStorage.removeItem(LS_KEY);
-  loadData();
+  if(!confirm('全ての変更をリセットして保存状態に戻しますか？'))return;
+  const saved=localStorage.getItem(LS_KEY+'-saved');
+  if(saved){
+    localStorage.setItem(LS_KEY,saved);
+    evs=JSON.parse(saved);
+  } else {
+    localStorage.removeItem(LS_KEY);
+    evs=deepClone(DEFAULT_EVS);
+    saveData();
+  }
   render();
   toast('リセットしました');
 }
