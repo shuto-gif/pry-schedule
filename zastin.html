@@ -31,6 +31,8 @@
   --field-dim: rgba(26,107,64,0.18);
   --free: #3a3a44;
   --free-dim: rgba(58,58,68,0.5);
+  --fw: #d27028;
+  --fw-dim: rgba(210,100,30,0.18);
   --off: #2a2a33;
   --off-dim: rgba(42,42,51,0.5);
   --move: #555;
@@ -75,6 +77,7 @@ body { background: var(--bg); color: var(--text); font-family: 'Noto Sans JP', s
 .ftag-live { background:var(--live-dim); color:#e86060; border-color:rgba(220,64,64,.3); }
 .ftag-notify { background:var(--notify-dim); color:#70d090; border-color:rgba(64,168,96,.3); }
 .ftag-field { background:var(--field-dim); color:#40a068; border-color:rgba(26,107,64,.3); }
+.ftag-fw { background:var(--fw-dim); color:#d27028; border-color:rgba(210,100,30,.35); }
 .ftag-off { background:var(--off-dim); color:#666; border-color:rgba(80,80,80,.3); }
 
 .container { padding:10px 8px 16px; overflow-x:auto; }
@@ -107,6 +110,7 @@ body { background: var(--bg); color: var(--text); font-family: 'Noto Sans JP', s
 .ev-live   { background:var(--live-dim);   border-color:var(--live);   color:#e86060; }
 .ev-notify { background:var(--notify-dim); border-color:var(--notify); color:#70d090; }
 .ev-field  { background:var(--field-dim);  border-color:var(--field);  color:#40a068; }
+.ev-fw     { background:var(--fw-dim);     border-color:var(--fw);     color:#d27028; }
 .ev-off    { background:var(--off-dim);    border-color:var(--off);    color:#555; }
 .ev-free   { background:var(--free-dim);   border-color:var(--free);   color:var(--text-dim); }
 .ev-move   { background:var(--move-dim);   border-color:var(--move);   color:var(--text-dim); }
@@ -168,6 +172,7 @@ body { background: var(--bg); color: var(--text); font-family: 'Noto Sans JP', s
   <span class="ftag ftag-live active" data-task="live" onclick="toggleTask(this)">LIVE/販売</span>
   <span class="ftag ftag-notify active" data-task="notify" onclick="toggleTask(this)">配信・告知</span>
   <span class="ftag ftag-field active" data-task="field" onclick="toggleTask(this)">動画納品</span>
+  <span class="ftag ftag-fw active" data-task="fw" onclick="toggleTask(this)">フィールドワーク</span>
   <span class="ftag ftag-off active" data-task="off" onclick="toggleTask(this)">非稼働</span>
 </div>
 <div class="container"><div class="timetable" id="timetable"></div></div>
@@ -178,7 +183,7 @@ body { background: var(--bg); color: var(--text); font-family: 'Noto Sans JP', s
 <label>備考</label><input id="ed-note" placeholder="備考（サブテキスト）">
 <div class="time-row"><div><label>開始</label><input id="ed-start" type="time"></div><div><label>終了</label><input id="ed-end" type="time"></div></div>
 <label>曜日</label><select id="ed-day"><option value="0">月</option><option value="1">火</option><option value="2">水</option><option value="3">木</option><option value="4">金</option><option value="5">土</option><option value="6">日</option></select>
-<label>カテゴリ</label><select id="ed-cat"><option value="design">個人ワーク</option><option value="board">ボードワーク</option><option value="pry">デザイン</option><option value="mtg">デザインMTG</option><option value="uni">UNI撮影</option><option value="yt">PRY撮影</option><option value="live">LIVE / 販売</option><option value="notify">配信・告知</option><option value="field">動画納品</option><option value="off">非稼働</option><option value="rest">休憩</option></select>
+<label>カテゴリ</label><select id="ed-cat"><option value="design">個人ワーク</option><option value="board">ボードワーク</option><option value="pry">デザイン</option><option value="mtg">デザインMTG</option><option value="uni">UNI撮影</option><option value="yt">PRY撮影</option><option value="live">LIVE / 販売</option><option value="notify">配信・告知</option><option value="field">動画納品</option><option value="fw">フィールドワーク</option><option value="off">非稼働</option><option value="rest">休憩</option></select>
 <label>担当</label><div class="who-checks" id="who-checks"><label><input type="checkbox" value="all" onchange="whoAllToggle(this)"> ALL</label><label><input type="checkbox" value="shuto"> Shuto</label><label><input type="checkbox" value="zastin"> Zastin</label><label><input type="checkbox" value="issei"> Issei</label></div>
 <label>場所</label><select id="ed-place"><option value="cabinet">5F CABINET</option><option value="atelier">5F ATELIER</option><option value="studio">4F STUDIO</option><option value="remote">REMOTE</option><option value="fieldwork">FIELDWORK</option></select>
 <div class="btn-row"><button class="btn-delete" id="btn-delete" onclick="deleteEvent()">削除</button><button class="btn-dup" id="btn-dup" onclick="dupEvent()">複製</button><button class="btn-cancel" onclick="closeModal()">キャンセル</button><button class="btn-save" onclick="saveEvent()">保存</button></div>
@@ -270,7 +275,7 @@ let editTarget=null;
 let dayBodies=[];
 const ALL_MEMBERS=['shuto','all','issei','zastin'];
 const ALL_FLOORS=['cabinet','atelier','studio','remote','fieldwork'];
-const ALL_TASKS=['design','board','pry','mtg','uni','yt','live','notify','field','off'];
+const ALL_TASKS=['design','board','pry','mtg','uni','yt','live','notify','field','fw','off'];
 let activeMembers=new Set(ALL_MEMBERS);
 let activeFloors=new Set(ALL_FLOORS);
 
