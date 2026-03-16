@@ -6,6 +6,7 @@
 <title>Issei — 週間スケジュール</title>
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;600;800&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
+
 :root {
   --bg: #0a0a0c;
   --surface: #141418;
@@ -42,12 +43,16 @@
 body { background: var(--bg); color: var(--text); font-family: 'Noto Sans JP', sans-serif; min-height: 100vh; user-select:none; }
 
 .header { padding: 16px 20px 10px; border-bottom: 1px solid var(--border); display: flex; align-items: baseline; gap: 16px; flex-wrap:wrap; }
-.header h1 { font-size: 16px; font-weight: 800; letter-spacing: .08em; color: #5b8def; }
+.header h1 { font-size: 16px; font-weight: 800; letter-spacing: .08em; color: var(--pry); }
 .header .ver { font-family:'DM Mono',monospace; font-size:10px; color:var(--text-dim); background:var(--surface2); padding:2px 8px; border-radius:4px; }
 .header .actions { margin-left:auto; display:flex; gap:8px; }
 .header .actions button { font-family:'Noto Sans JP',sans-serif; font-size:9px; padding:4px 10px; border-radius:4px; border:1px solid var(--border); background:var(--surface2); color:var(--text-dim); cursor:pointer; transition:all .15s; }
 .header .actions button:hover { border-color:var(--pry); color:var(--pry); }
 .header .actions button.danger:hover { border-color:#e85d5d; color:#e85d5d; }
+
+.nav { padding:8px 20px; display:flex; gap:12px; border-bottom:1px solid var(--border); }
+.nav a { font-size:10px; text-decoration:none; padding:3px 10px; border-radius:4px; border:1px solid var(--border); color:var(--text-dim); }
+.nav a.active { color:var(--pry); border-color:var(--pry); }
 
 .legend { padding: 8px 20px; display:flex; gap:14px; flex-wrap:wrap; border-bottom:1px solid var(--border); }
 .legend-item { display:flex; align-items:center; gap:4px; font-size:9px; color:var(--text-dim); }
@@ -62,9 +67,8 @@ body { background: var(--bg); color: var(--text); font-family: 'Noto Sans JP', s
 .day-hdr { padding:5px 4px; text-align:center; border-bottom:1px solid var(--border); background:var(--bg); position:sticky; top:0; z-index:10; }
 .day-name { font-size:11px; font-weight:800; letter-spacing:.04em; }
 .day-theme { font-size:8px; font-weight:300; color:var(--text-dim); margin-top:1px; }
-.day-body { position:relative; }
+.day-body { position:relative; cursor:crosshair; }
 .hline { position:absolute; left:0; right:0; height:1px; background:var(--border); opacity:.35; }
-.day-body { cursor:crosshair; }
 
 .ev { position:absolute; left:2px; right:2px; border-radius:3px; padding:2px 4px; font-size:8px; line-height:1.25; overflow:hidden; border-left:2px solid; cursor:grab; transition: box-shadow .12s; z-index:1; }
 .ev:hover { box-shadow:0 4px 16px rgba(0,0,0,.4); z-index:5; }
@@ -92,15 +96,15 @@ body { background: var(--bg); color: var(--text); font-family: 'Noto Sans JP', s
 .modal-overlay { display:none; position:fixed; inset:0; background:rgba(0,0,0,.6); z-index:200; justify-content:center; align-items:center; }
 .modal-overlay.open { display:flex; }
 .modal { background:var(--surface); border:1px solid var(--border); border-radius:10px; padding:20px 24px; width:340px; max-width:90vw; box-shadow:0 20px 60px rgba(0,0,0,.5); }
-.modal h3 { font-size:13px; font-weight:800; color:#5b8def; margin-bottom:14px; }
+.modal h3 { font-size:13px; font-weight:800; color:var(--pry); margin-bottom:14px; }
 .modal label { display:block; font-size:9px; color:var(--text-dim); margin-bottom:3px; margin-top:10px; }
 .modal input, .modal select { width:100%; padding:6px 8px; border-radius:4px; border:1px solid var(--border); background:var(--surface2); color:var(--text); font-family:'Noto Sans JP',sans-serif; font-size:11px; }
-.modal input:focus, .modal select:focus { outline:none; border-color:#5b8def; }
+.modal input:focus, .modal select:focus { outline:none; border-color:var(--pry); }
 .modal .time-row { display:grid; grid-template-columns:1fr auto 1fr; gap:6px; align-items:end; }
 .modal .time-row span { text-align:center; padding-bottom:6px; color:var(--text-dim); font-size:11px; }
 .modal .btn-row { display:flex; gap:8px; margin-top:16px; justify-content:flex-end; }
 .modal .btn-row button { font-family:'Noto Sans JP',sans-serif; font-size:10px; padding:6px 14px; border-radius:4px; border:1px solid var(--border); cursor:pointer; transition:all .15s; }
-.modal .btn-save { background:#5b8def; border-color:#5b8def; color:#111; font-weight:600; }
+.modal .btn-save { background:var(--pry); border-color:var(--pry); color:#111; font-weight:600; }
 .modal .btn-save:hover { opacity:.85; }
 .modal .btn-cancel { background:transparent; color:var(--text-dim); }
 .modal .btn-cancel:hover { border-color:var(--text-dim); }
@@ -111,7 +115,7 @@ body { background: var(--bg); color: var(--text); font-family: 'Noto Sans JP', s
 .check-item { display:flex; align-items:center; gap:4px; font-size:10px; color:var(--text); cursor:pointer; }
 .check-item input[type="checkbox"] { accent-color:var(--pry); width:14px; height:14px; cursor:pointer; }
 
-.toast { position:fixed; bottom:20px; right:20px; background:var(--surface2); border:1px solid #5b8def; border-radius:6px; padding:8px 16px; font-size:10px; color:#5b8def; z-index:300; opacity:0; transition:opacity .3s; pointer-events:none; }
+.toast { position:fixed; bottom:20px; right:20px; background:var(--surface2); border:1px solid var(--pry); border-radius:6px; padding:8px 16px; font-size:10px; color:var(--pry); z-index:300; opacity:0; transition:opacity .3s; pointer-events:none; }
 .toast.show { opacity:1; }
 </style>
 </head>
@@ -119,40 +123,42 @@ body { background: var(--bg); color: var(--text); font-family: 'Noto Sans JP', s
 
 <div class="header">
   <h1>Issei — 週間スケジュール</h1>
-  <span class="ver">v10 — 2026/03/13</span>
+  <span class="ver">v10 — 2026/03/16</span>
   <div class="actions">
     <button onclick="addEvent()">＋ 追加</button>
     <button class="danger" onclick="resetData()">リセット</button>
   </div>
 </div>
 
-<div class="nav" style="padding:8px 20px;display:flex;gap:12px;border-bottom:1px solid var(--border)">
-  <a href="index.html" style="font-size:10px;color:var(--text-dim);text-decoration:none;padding:3px 10px;border-radius:4px;border:1px solid var(--border)">全体</a>
-  <a href="shuto.html" style="font-size:10px;color:var(--text-dim);text-decoration:none;padding:3px 10px;border-radius:4px;border:1px solid var(--border)">Shuto</a>
-  <a href="zastin.html" style="font-size:10px;color:var(--text-dim);text-decoration:none;padding:3px 10px;border-radius:4px;border:1px solid var(--border)">Zastin</a>
-  <a href="issei.html" style="font-size:10px;color:#5b8def;text-decoration:none;padding:3px 10px;border-radius:4px;border:1px solid #5b8def">Issei</a>
+<div class="nav">
+  <a href="index.html">全体</a>
+  <a href="shuto.html">Shuto</a>
+  <a href="zastin.html">Zastin</a>
+  <a href="issei.html" class="active">Issei</a>
 </div>
 <div class="legend">
-  <div class="legend-item"><div class="legend-dot" style="background:var(--pry)"></div>サンプル管理・指示</div>
-  <div class="legend-item"><div class="legend-dot" style="background:var(--notify)"></div>EC・撮影補助</div>
-  <div class="legend-item"><div class="legend-dot" style="background:var(--design)"></div>個人ワーク</div>
   <div class="legend-item"><div class="legend-dot" style="background:var(--board)"></div>ボードワーク</div>
+  <div class="legend-item"><div class="legend-dot" style="background:var(--pry)"></div>PRY（撮影・ブレスト）</div>
+  <div class="legend-item"><div class="legend-dot" style="background:var(--yt)"></div>UNI（ブレスト・調査・撮影）</div>
+  <div class="legend-item"><div class="legend-dot" style="background:var(--design)"></div>個人ワーク</div>
   <div class="legend-item"><div class="legend-dot" style="background:var(--mtg)"></div>外部MTG</div>
   <div class="legend-item"><div class="legend-dot" style="background:var(--live)"></div>LIVE / 販売</div>
+  <div class="legend-item"><div class="legend-dot" style="background:var(--notify)"></div>配信・告知</div>
+  <div class="legend-item"><div class="legend-dot" style="background:var(--field)"></div>動画納品（前日19:00締切）</div>
 </div>
 
 <div class="container">
   <div class="timetable" id="timetable"></div>
 </div>
 
-<div class="footer">v10 — 2026/03/13　Issei個人スケジュール</div>
+<div class="footer">v10 — 2026/03/16　Issei個人スケジュール</div>
 
 <div class="modal-overlay" id="modal-overlay">
   <div class="modal">
     <h3 id="modal-title">イベント編集</h3>
     <label>タイトル</label>
     <input type="text" id="ed-title">
-    <label>反映先</label>
+    <label>担当</label>
     <div class="check-row">
       <label class="check-item"><input type="checkbox" id="cb-all"> all</label>
       <label class="check-item"><input type="checkbox" id="cb-shuto"> shuto</label>
@@ -174,12 +180,12 @@ body { background: var(--bg); color: var(--text); font-family: 'Noto Sans JP', s
     <label>カテゴリ</label>
     <select id="ed-cat">
       <option value="board">ボードワーク</option>
-      <option value="pry">サンプル管理・指示</option>
+      <option value="pry">PRY</option>
       <option value="yt">UNI</option>
       <option value="design">個人ワーク</option>
       <option value="mtg">外部MTG</option>
       <option value="live">LIVE / 販売</option>
-      <option value="notify">EC・撮影補助</option>
+      <option value="notify">配信・告知</option>
       <option value="field">動画納品</option>
       <option value="off">非稼働</option>
       <option value="rest">休憩</option>
@@ -196,83 +202,113 @@ body { background: var(--bg); color: var(--text); font-family: 'Noto Sans JP', s
 
 <script>
 const SH=8, EH=24, PX=38, SNAP=0.25;
-const CATS=['board','pry','yt','design','mtg','live','notify','field','off','rest'];
 const DAY_NAMES=['月','火','水','木','金','土','日'];
 const dayMeta=[
-  {n:'月',th:'スチール/ムービー + KANBAN + LIVE',c:'var(--pry)'},
-  {n:'火',th:'ボードワーク',c:'var(--board)'},
-  {n:'水',th:'個人ワーク（リモート）',c:'var(--design)'},
-  {n:'木',th:'外部MTG + ボード再設計',c:'var(--mtg)'},
-  {n:'金',th:'PRY動画更新 + 新作ページ公開',c:'var(--pry)'},
-  {n:'土',th:'個人ワーク or イベント',c:'var(--design)'},
-  {n:'日',th:'非稼働',c:'#555'},
+  {th:'スチール/ムービー + UNI + LIVE',c:'var(--pry)'},
+  {th:'ボードワーク + PRY撮影',c:'var(--pry)'},
+  {th:'個人ワーク（リモート）',c:'var(--design)'},
+  {th:'外部デザインMTG集約',c:'var(--mtg)'},
+  {th:'PRYブレスト + UNI',c:'var(--pry)'},
+  {th:'個人ワーク or イベント',c:'var(--design)'},
+  {th:'非稼働',c:'#555'},
 ];
+
+const PAGE_FILTER = 'issei';
 
 const DEFAULT_EVS = [
   [
-    {s:8,e:9,t:'サンプル進捗ボード更新・アイテム管理',u:'',c:'board'},
-    {s:8,e:14,t:'スチール/ムービー撮影',u:'角田さん or 平永さん（隔週ローテ）',c:'pry',l:'50%'},
-    {s:12,e:14,t:'サンプルKANBAN更新&アイテム管理',u:'',c:'pry',l:'50%'},
-    {s:14,e:15,t:'サンプル指示出し確認',u:'with shuto',c:'pry'},
-    {s:15,e:18,t:'UNI撮影補助&ECページ完成',u:'',c:'yt'},
-    {s:20.25,e:20.5,t:'📢 LINE配信',u:'LIVE&販売告知',c:'notify'},
-    {s:20.5,e:21.33,t:'🔴 発売直前LIVE',u:'all',c:'live'},
-    {s:21,e:22,t:'🔴 PRY新作発売',u:'1h限定受注',c:'live',l:'50%'},
-    {s:22.33,e:23,t:'ボード再設計&後片付け',u:'all',c:'board'},
+    {s:8,e:9,t:'サンプル進捗ボード更新・アイテム管理',u:'',c:'board',w:['issei']},
+    {s:8,e:14,t:'スチール/ムービー撮影',u:'角田さん or 平永さん（隔週ローテ）',c:'pry',w:['all']},
+    {s:12,e:15,t:'UNIブレスト/台本',u:'',c:'yt',w:['shuto','zastin']},
+    {s:12,e:14,t:'サンプルKANBAN更新&アイテム管理',u:'',c:'board',w:['issei']},
+    {s:14,e:15,t:'サンプル指示出し確認',u:'',c:'pry',w:['shuto','issei']},
+    {s:15,e:18,t:'UNI撮影',u:'',c:'yt',w:['shuto','zastin']},
+    {s:15,e:18,t:'UNI撮影補助&ECページ完成',u:'',c:'notify',w:['issei']},
+    {s:19,e:19.5,t:'📢 YTコミュ配信',u:'LIVE&販売告知',c:'notify',w:['zastin']},
+    {s:20.25,e:20.5,t:'📢 LINE配信',u:'LIVE&販売告知',c:'notify',w:['all']},
+    {s:20.5,e:21.33,t:'🔴 発売直前LIVE',u:'',c:'live',w:['all']},
+    {s:21,e:22,t:'🔴 PRY新作発売',u:'1h限定受注 — 零点通過',c:'live',w:['all']},
+    {s:22.33,e:23,t:'ボード再設計&後片付け',u:'',c:'board',w:['all']},
   ],
   [
-    {s:12,e:16,t:'ボードワーク',u:'all',c:'board'},
-    {s:17,e:18,t:'サンプル進捗ボード更新・アイテム管理',u:'',c:'board'},
+    {s:11,e:12,t:'ボードワーク',u:'一人',c:'board',w:['shuto']},
+    {s:12,e:16,t:'ボードワーク',u:'',c:'board',w:['all']},
+    {s:17,e:18,t:'サンプル進捗ボード更新・アイテム管理',u:'',c:'board',w:['issei']},
+    {s:18,e:19,t:'🎬 水曜UNI動画 納品',u:'19:00締切 素材＋編集済',c:'field',w:['all']},
+    {s:18,e:21,t:'PRY撮影',u:'',c:'pry',w:['shuto','zastin']},
   ],
   [
-    {s:10,e:21,t:'個人ワーク（リモート）',u:'生産背景との連絡&イベント準備&ロイヤルカスタマー施策',c:'design'},
-    {s:19,e:19.5,t:'📢 UNI動画更新（YT）',u:'',c:'notify',l:'50%'},
+    {s:10,e:21,t:'個人ワーク（リモート）',u:'デザイン[shuto] / サムネ[zastin] / 生産管理[issei]',c:'design',w:['all']},
+    {s:18,e:19,t:'🎬 木曜UNI動画 納品',u:'19:00締切 素材＋編集済',c:'field',w:['all']},
+    {s:19,e:19.5,t:'📢 UNI動画更新（YT）',u:'',c:'notify',w:['all']},
   ],
   [
-    {s:8,e:9,t:'サンプル進捗ボード更新・アイテム管理',u:'',c:'board'},
-    {s:9,e:10,t:'デザインボード＆チューニング&アイテム管理',u:'all',c:'board'},
-    {s:10,e:13,t:'SR MTG（対面）',u:'生産管理',c:'mtg'},
-    {s:13,e:15,t:'CO MTG（対面）',u:'生産管理',c:'mtg'},
-    {s:15,e:19,t:'業務委託MTG&ボード再設計',u:'with shuto',c:'mtg'},
-    {s:19,e:19.5,t:'📢 UNI動画更新（YT）',u:'',c:'notify'},
+    {s:8,e:9,t:'サムネチェック＆修正',u:'',c:'yt',w:['shuto','zastin']},
+    {s:8,e:9,t:'サンプル進捗ボード更新・アイテム管理',u:'',c:'board',w:['issei']},
+    {s:9,e:10,t:'デザインボード＆チューニング&アイテム管理',u:'',c:'board',w:['all']},
+    {s:10,e:13,t:'SR MTG（対面）',u:'デザイン[shuto] / 生産管理[issei] / 撮影&サムネ[zastin]',c:'mtg',w:['all']},
+    {s:13,e:15,t:'CO MTG（対面）',u:'デザイン[shuto] / 生産管理[issei] / 撮影&サムネ[zastin]',c:'mtg',w:['all']},
+    {s:15,e:19,t:'業務委託デザインMTG変動枠&ボード再設計',u:'',c:'mtg',w:['shuto','issei']},
+    {s:18,e:19,t:'🎬 金曜PRY動画 納品',u:'19:00締切 素材＋編集済',c:'field',w:['all']},
+    {s:19,e:19.5,t:'📢 UNI動画更新（YT）',u:'',c:'notify',w:['all']},
+    {s:19,e:21,t:'全サムネ完成',u:'',c:'yt',w:['shuto','zastin']},
   ],
   [
-    {s:17,e:18,t:'サンプル進捗ボード更新・アイテム管理',u:'',c:'board'},
-    {s:19,e:19.5,t:'📢 PRY動画更新（YT）',u:'',c:'pry'},
-    {s:20,e:20.5,t:'📢 PRY新作ページ公開',u:'EC',c:'notify'},
+    {s:9,e:13,t:'PRYブレスト・構成確定',u:'',c:'pry',w:['shuto','zastin']},
+    {s:14,e:16.5,t:'UNI市場環境調査',u:'',c:'yt',w:['shuto','zastin']},
+    {s:16.5,e:18,t:'UNIブレスト/台本',u:'',c:'yt',w:['shuto','zastin']},
+    {s:17,e:18,t:'サンプル進捗ボード更新・アイテム管理',u:'',c:'board',w:['issei']},
+    {s:18,e:19,t:'🎬 土曜UNI動画 納品',u:'19:00締切 素材＋編集済',c:'field',w:['all']},
+    {s:18,e:20,t:'UNI撮影',u:'',c:'yt',w:['shuto','zastin']},
+    {s:19,e:19.5,t:'📢 PRY動画更新（YT）',u:'',c:'pry',w:['all']},
+    {s:20,e:20.5,t:'📢 PRY新作ページ公開',u:'EC',c:'notify',w:['all']},
   ],
   [
-    {s:10,e:21,t:'個人ワーク or イベント',u:'LINE対応',c:'design'},
-    {s:19,e:19.5,t:'📢 UNI動画更新（YT）',u:'',c:'notify',l:'50%'},
+    {s:10,e:21,t:'個人ワーク or イベント',u:'戦略&デザイン[shuto] / 告知予約[zastin] / LINE対応[issei]',c:'design',w:['all']},
+    {s:18,e:19,t:'🎬 日曜UNI動画 納品',u:'19:00締切 素材＋編集済',c:'field',w:['all']},
+    {s:19,e:19.5,t:'📢 UNI動画更新（YT）',u:'',c:'notify',w:['all']},
   ],
   [
-    {s:8,e:24,t:'非稼働',u:'予約配信のみ',c:'off'},
-    {s:12,e:12.5,t:'📢 メルマガ配信',u:'予約',c:'notify',l:'50%'},
-    {s:19,e:19.5,t:'📢 UNI動画更新（YT）',u:'予約',c:'notify',l:'50%'},
-    {s:20,e:20.5,t:'📢 YTコミュニティ投稿',u:'予約',c:'notify',l:'50%'},
-    {s:21,e:21.5,t:'📢 LINE配信',u:'予約',c:'notify',l:'50%'},
+    {s:8,e:24,t:'非稼働',u:'予約配信のみ',c:'off',w:['all']},
+    {s:12,e:12.5,t:'📢 メルマガ配信',u:'予約',c:'notify',w:['all']},
+    {s:19,e:19.5,t:'📢 UNI動画更新（YT）',u:'予約',c:'notify',w:['all']},
+    {s:20,e:20.5,t:'📢 YTコミュニティ投稿',u:'予約',c:'notify',w:['all']},
+    {s:21,e:21.5,t:'📢 LINE配信',u:'予約',c:'notify',w:['all']},
   ],
 ];
 
-const LS_KEY='pry-schedule-v10-issei';
-const ALL_LS={main:'pry-schedule-v10',shuto:'pry-schedule-v10-shuto',zastin:'pry-schedule-v10-zastin',issei:'pry-schedule-v10-issei'};
-const CUR_PAGE='issei';
+const LS_KEY='pry-schedule-v11';
 let evs;
 let dragState=null;
 let editTarget=null;
 let dayBodies=[];
 
 function deepClone(o){return JSON.parse(JSON.stringify(o));}
+
 function loadData(){
   const raw=localStorage.getItem(LS_KEY);
-  if(raw){try{evs=JSON.parse(raw);}catch(e){evs=deepClone(DEFAULT_EVS);}}
-  else{evs=deepClone(DEFAULT_EVS);}
-  const pk=LS_KEY+'-pending';
-  const pr=localStorage.getItem(pk);
-  if(pr){try{JSON.parse(pr).forEach(p=>{if(!evs[p.d])evs[p.d]=[];evs[p.d].push(p.ev);});}catch(e){}localStorage.removeItem(pk);}
+  if(raw){
+    try{
+      evs=JSON.parse(raw);
+      evs.forEach(d=>d.forEach(ev=>{if(!ev.w)ev.w=['all'];}));
+    }catch(e){evs=deepClone(DEFAULT_EVS);}
+  } else {
+    evs=deepClone(DEFAULT_EVS);
+  }
   saveData();
 }
+
 function saveData(){localStorage.setItem(LS_KEY,JSON.stringify(evs));}
+
+function getVisible(di){
+  if(!evs[di])return[];
+  return evs[di].map((ev,i)=>({ev,oi:i})).filter(({ev})=>{
+    if(!PAGE_FILTER)return true;
+    const w=ev.w||['all'];
+    return w.includes('all')||w.includes(PAGE_FILTER);
+  });
+}
+
 function snap(v){return Math.round(v/SNAP)*SNAP;}
 function fmt(h){const hh=Math.floor(h),mm=Math.round((h%1)*60);return `${String(hh).padStart(2,'0')}:${String(mm).padStart(2,'0')}`;}
 function timeToH(s){const[h,m]=s.split(':').map(Number);return h+m/60;}
@@ -337,9 +373,11 @@ function render(){
       body.appendChild(ln);
     }
 
-    layoutDay(evs[di]);
-    (evs[di]||[]).forEach((ev,ei)=>{
-      const el=mkEvent(ev,di,ei);
+    const vis=getVisible(di);
+    const visEvs=vis.map(v=>v.ev);
+    layoutDay(visEvs);
+    vis.forEach(({ev,oi})=>{
+      const el=mkEvent(ev,di,oi);
       body.appendChild(el);
     });
 
@@ -379,8 +417,7 @@ function render(){
         document.getElementById('ed-cat').value='pry';
         document.getElementById('modal-title').textContent='イベント追加';
         document.getElementById('btn-delete').style.display='none';
-        if(CUR_PAGE==='main') setCheckboxes(true,false,false,false);
-        else setCheckboxes(false,CUR_PAGE==='shuto',CUR_PAGE==='zastin',CUR_PAGE==='issei');
+        setCheckboxes(PAGE_FILTER?false:true, PAGE_FILTER==='shuto', PAGE_FILTER==='zastin', PAGE_FILTER==='issei');
         document.getElementById('modal-overlay').classList.add('open');
       }
       document.addEventListener('mousemove',onM);
@@ -399,22 +436,19 @@ function mkEvent(ev,di,ei){
   if(ev._tc>1){const w=100/ev._tc;el.style.left=`calc(${ev._col*w}% + 1px)`;el.style.width=`calc(${w}% - 2px)`;el.style.right='auto';}
   el.dataset.day=di;
   el.dataset.idx=ei;
-  el.innerHTML=`<div class="ev-t">${ev.t}</div>${height>20?`<div class="ev-s">${ev.u||''}</div>`:''}<div class="resize-handle"></div>`;
+
+  const wTag=ev.w&&!ev.w.includes('all')?` [${ev.w.join(',')}]`:'';
+  el.innerHTML=`<div class="ev-t">${ev.t}${wTag}</div>${height>20?`<div class="ev-s">${ev.u||''}</div>`:''}<div class="resize-handle"></div>`;
 
   el.addEventListener('mousedown',e=>{
-    if(e.target.classList.contains('resize-handle')){
-      startResize(e,di,ei,el);
-    } else {
-      startDrag(e,di,ei,el);
-    }
+    if(e.target.classList.contains('resize-handle')) startResize(e,di,ei,el);
+    else startDrag(e,di,ei,el);
   });
-
   el.addEventListener('dblclick',e=>{
     e.preventDefault();
     e.stopPropagation();
     openModal(di,ei);
   });
-
   return el;
 }
 
@@ -484,8 +518,7 @@ function startResize(e,di,ei,el){
     const y=e2.clientY-bRect.top;
     let newE=snap(SH+y/PX);
     newE=Math.max(ev.s+SNAP,Math.min(EH,newE));
-    const height=Math.max((newE-ev.s)*PX-2,14);
-    el.style.height=height+'px';
+    el.style.height=Math.max((newE-ev.s)*PX-2,14)+'px';
     ev.e=newE;
   }
   function onUp(){
@@ -514,6 +547,15 @@ function setCheckboxes(all,sh,za,is){
   document.getElementById('cb-issei').checked=all||is;
 }
 
+function readW(){
+  if(document.getElementById('cb-all').checked) return ['all'];
+  const w=[];
+  if(document.getElementById('cb-shuto').checked) w.push('shuto');
+  if(document.getElementById('cb-zastin').checked) w.push('zastin');
+  if(document.getElementById('cb-issei').checked) w.push('issei');
+  return w.length?w:['all'];
+}
+
 function openModal(di,ei){
   editTarget={di,ei};
   const ev=evs[di][ei];
@@ -525,50 +567,15 @@ function openModal(di,ei){
   document.getElementById('ed-cat').value=ev.c;
   document.getElementById('modal-title').textContent='イベント編集';
   document.getElementById('btn-delete').style.display='';
-  if(CUR_PAGE==='main') setCheckboxes(true,false,false,false);
-  else setCheckboxes(false,CUR_PAGE==='shuto',CUR_PAGE==='zastin',CUR_PAGE==='issei');
+  const w=ev.w||['all'];
+  const isAll=w.includes('all');
+  setCheckboxes(isAll, isAll||w.includes('shuto'), isAll||w.includes('zastin'), isAll||w.includes('issei'));
   document.getElementById('modal-overlay').classList.add('open');
 }
 
 function closeModal(){
   document.getElementById('modal-overlay').classList.remove('open');
   editTarget=null;
-}
-
-function getTargetKeys(){
-  const targets=new Set();
-  targets.add(ALL_LS[CUR_PAGE]);
-  if(document.getElementById('cb-all').checked){
-    Object.values(ALL_LS).forEach(k=>targets.add(k));
-  } else {
-    if(document.getElementById('cb-shuto').checked) targets.add(ALL_LS.shuto);
-    if(document.getElementById('cb-zastin').checked) targets.add(ALL_LS.zastin);
-    if(document.getElementById('cb-issei').checked) targets.add(ALL_LS.issei);
-  }
-  return [...targets];
-}
-
-function syncToOtherCalendars(newEv,newDi,skipKey){
-  const targets=getTargetKeys().filter(k=>k!==skipKey);
-  let count=0;
-  targets.forEach(key=>{
-    const raw=localStorage.getItem(key);
-    let data;
-    try{data=raw?JSON.parse(raw):null;}catch(ex){data=null;}
-    if(data){
-      if(!data[newDi])data[newDi]=[];
-      data[newDi].push({...newEv});
-      localStorage.setItem(key,JSON.stringify(data));
-    } else {
-      const pk=key+'-pending';
-      const pr=localStorage.getItem(pk);
-      let pq;try{pq=pr?JSON.parse(pr):[];}catch(ex){pq=[];}
-      pq.push({d:newDi,ev:{...newEv}});
-      localStorage.setItem(pk,JSON.stringify(pq));
-    }
-    count++;
-  });
-  return count;
 }
 
 function saveEvent(){
@@ -581,18 +588,18 @@ function saveEvent(){
   const cat=document.getElementById('ed-cat').value;
   if(e<=s){toast('終了は開始より後に');return;}
 
-  const newEv={s,e,t:title,u:note,c:cat};
+  const w=readW();
+  const newEv={s,e,t:title,u:note,c:cat,w};
 
   if(editTarget){
     const {di,ei}=editTarget;
     if(ei!==-1) evs[di].splice(ei,1);
-    evs[newDi].push({...newEv});
+    evs[newDi].push(newEv);
   }
   saveData();
-  const synced=syncToOtherCalendars(newEv,newDi,ALL_LS[CUR_PAGE]);
   render();
   closeModal();
-  toast(synced>0?`保存（${synced}件同期）`:'保存しました');
+  toast('保存しました');
 }
 
 function deleteEvent(){
@@ -616,8 +623,7 @@ function addEvent(){
   document.getElementById('ed-cat').value='pry';
   document.getElementById('modal-title').textContent='イベント追加';
   document.getElementById('btn-delete').style.display='none';
-  if(CUR_PAGE==='main') setCheckboxes(true,false,false,false);
-  else setCheckboxes(false,CUR_PAGE==='shuto',CUR_PAGE==='zastin',CUR_PAGE==='issei');
+  setCheckboxes(PAGE_FILTER?false:true, PAGE_FILTER==='shuto', PAGE_FILTER==='zastin', PAGE_FILTER==='issei');
   document.getElementById('modal-overlay').classList.add('open');
 }
 
