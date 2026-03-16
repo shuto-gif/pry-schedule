@@ -1,12 +1,8 @@
 <!DOCTYPE html>
-<html lang="ja">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<html lang="ja"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Issei — 週間スケジュール</title>
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;600;800&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
-
 :root {
   --bg: #0a0a0c;
   --surface: #141418;
@@ -69,7 +65,7 @@ body { background: var(--bg); color: var(--text); font-family: 'Noto Sans JP', s
 .ftag-atelier { background:rgba(70,130,230,.15); color:#6aa0f0; border-color:rgba(70,130,230,.25); }
 .ftag-cabinet { background:rgba(255,255,255,.1); color:#ddd; border-color:rgba(255,255,255,.25); }
 .ftag-remote { background:rgba(100,200,140,.12); color:#6fcf97; border-color:rgba(100,200,140,.2); }
-.ftag-online { background:rgba(255,255,255,.06); color:#777; border-color:rgba(255,255,255,.1); }
+.ftag-online { background:rgba(100,200,140,.12); color:#6fcf97; border-color:rgba(100,200,140,.2); }
 .ftag-fieldwork { background:rgba(255,160,80,.15); color:#f0a050; border-color:rgba(255,160,80,.25); }
 
 .ftag-board { background:var(--board-dim); color:#c4bcf5; border-color:rgba(124,111,224,.35); }
@@ -142,21 +138,9 @@ body { background: var(--bg); color: var(--text); font-family: 'Noto Sans JP', s
 
 .toast { position:fixed; bottom:20px; right:20px; background:var(--surface2); border:1px solid var(--pry); border-radius:6px; padding:8px 16px; font-size:10px; color:var(--pry); z-index:300; opacity:0; transition:opacity .3s; pointer-events:none; }
 .toast.show { opacity:1; }
-
-</style>
-</head>
-<body>
-<div class="header">
-  <h1>Issei — 週間スケジュール</h1>
-  <span class="ver">v10 — 2026/03/16　Issei個人スケジュール</span>
-  <div class="actions">
-    <button onclick="addEvent()">＋ 追加</button>
-    <button class="danger" onclick="resetData()">リセット</button>
-  </div>
-</div>
-<div class="nav">
-  <a href="index.html">全体</a><a href="shuto.html">Shuto</a><a href="zastin.html">Zastin</a><a href="issei.html" class="active">Issei</a>
-</div>
+</style></head><body>
+<div class="header"><h1>Issei — 週間スケジュール</h1><span class="ver">v10 — 2026/03/16　Issei個人スケジュール</span><div class="actions"><button onclick="addEvent()">＋ 追加</button><button class="danger" onclick="resetData()">リセット</button></div></div>
+<div class="nav"><a href="index.html">全体</a><a href="shuto.html">Shuto</a><a href="zastin.html">Zastin</a><a href="issei.html" class="active">Issei</a></div>
 <div class="filter-bar" id="filter-member">
   <span class="filter-label">MEMBER:</span>
   <span class="ftag ftag-all active" data-member="all" onclick="toggleMember(this)">ALL</span>
@@ -185,27 +169,19 @@ body { background: var(--bg); color: var(--text); font-family: 'Noto Sans JP', s
   <span class="ftag ftag-field active" data-task="field" onclick="toggleTask(this)">動画納品</span>
   <span class="ftag ftag-off active" data-task="off" onclick="toggleTask(this)">非稼働</span>
 </div>
-<div class="container">
-  <div class="timetable" id="timetable"></div>
-</div>
+<div class="container"><div class="timetable" id="timetable"></div></div>
 <div class="modal-overlay" id="modal-overlay" onclick="closeModal()"></div>
-<div class="modal" id="modal">
-  <div class="modal-content">
-    <h3 id="modal-title">イベント編集</h3>
-    <label>タイトル</label><input id="ed-title" placeholder="イベント名">
-    <label>備考</label><input id="ed-note" placeholder="備考（サブテキスト）">
-    <div class="time-row"><div><label>開始</label><input id="ed-start" type="time"></div><div><label>終了</label><input id="ed-end" type="time"></div></div>
-    <label>曜日</label>
-    <select id="ed-day"><option value="0">月</option><option value="1">火</option><option value="2">水</option><option value="3">木</option><option value="4">金</option><option value="5">土</option><option value="6">日</option></select>
-    <label>カテゴリ</label>
-    <select id="ed-cat"><option value="board">ボードワーク</option><option value="pry">PRY</option><option value="yt">UNI</option><option value="design">個人ワーク</option><option value="mtg">外部MTG</option><option value="live">LIVE / 販売</option><option value="notify">配信・告知</option><option value="field">動画納品</option><option value="off">非稼働</option></select>
-    <label>担当</label>
-    <div class="who-checks" id="who-checks"><label><input type="checkbox" value="all" onchange="whoAllToggle(this)"> ALL</label><label><input type="checkbox" value="shuto"> Shuto</label><label><input type="checkbox" value="zastin"> Zastin</label><label><input type="checkbox" value="issei"> Issei</label></div>
-    <label>場所</label>
-    <select id="ed-place"><option value="studio">4F STUDIO</option><option value="atelier">5F ATELIER</option><option value="cabinet">5F CABINET</option><option value="remote">REMOTE</option><option value="online">ONLINE</option><option value="fieldwork">FIELDWORK</option></select>
-    <div class="btn-row"><button class="btn-delete" id="btn-delete" onclick="deleteEvent()">削除</button><button class="btn-cancel" onclick="closeModal()">キャンセル</button><button class="btn-save" onclick="saveEvent()">保存</button></div>
-  </div>
-</div>
+<div class="modal" id="modal"><div class="modal-content">
+<h3 id="modal-title">イベント編集</h3>
+<label>タイトル</label><input id="ed-title" placeholder="イベント名">
+<label>備考</label><input id="ed-note" placeholder="備考（サブテキスト）">
+<div class="time-row"><div><label>開始</label><input id="ed-start" type="time"></div><div><label>終了</label><input id="ed-end" type="time"></div></div>
+<label>曜日</label><select id="ed-day"><option value="0">月</option><option value="1">火</option><option value="2">水</option><option value="3">木</option><option value="4">金</option><option value="5">土</option><option value="6">日</option></select>
+<label>カテゴリ</label><select id="ed-cat"><option value="board">ボードワーク</option><option value="pry">PRY</option><option value="yt">UNI</option><option value="design">個人ワーク</option><option value="mtg">外部MTG</option><option value="live">LIVE / 販売</option><option value="notify">配信・告知</option><option value="field">動画納品</option><option value="off">非稼働</option></select>
+<label>担当</label><div class="who-checks" id="who-checks"><label><input type="checkbox" value="all" onchange="whoAllToggle(this)"> ALL</label><label><input type="checkbox" value="shuto"> Shuto</label><label><input type="checkbox" value="zastin"> Zastin</label><label><input type="checkbox" value="issei"> Issei</label></div>
+<label>場所</label><select id="ed-place"><option value="studio">4F STUDIO</option><option value="atelier">5F ATELIER</option><option value="cabinet">5F CABINET</option><option value="remote">REMOTE</option><option value="online">ONLINE</option><option value="fieldwork">FIELDWORK</option></select>
+<div class="btn-row"><button class="btn-delete" id="btn-delete" onclick="deleteEvent()">削除</button><button class="btn-cancel" onclick="closeModal()">キャンセル</button><button class="btn-save" onclick="saveEvent()">保存</button></div>
+</div></div>
 <div class="toast" id="toast"></div>
 <script>
 const SH=8, EH=24, PX=38, SNAP=0.25;
@@ -716,6 +692,4 @@ document.getElementById('cb-all').addEventListener('change',function(){
 
 loadData();
 render();
-</script>
-</body>
-</html>
+</script></body></html>
