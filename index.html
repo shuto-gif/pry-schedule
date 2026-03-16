@@ -146,8 +146,10 @@ body { background: var(--bg); color: var(--text); font-family: 'Noto Sans JP', s
 .modal .btn-save:hover { opacity:.85; }
 .modal .btn-cancel { background:transparent; color:var(--text-dim); }
 .modal .btn-cancel:hover { border-color:var(--text-dim); }
-.modal .btn-delete { background:transparent; color:#e85d5d; border-color:#e85d5d; margin-right:auto; }
+.modal .btn-delete { background:transparent; color:#e85d5d; border-color:#e85d5d; }
 .modal .btn-delete:hover { background:rgba(232,93,93,.15); }
+.modal .btn-dup { background:transparent; color:#80b0e8; border-color:#80b0e8; margin-right:auto; }
+.modal .btn-dup:hover { background:rgba(128,176,232,.15); }
 
 .check-row { display:flex; gap:14px; margin-top:4px; flex-wrap:wrap; }
 .check-item { display:flex; align-items:center; gap:4px; font-size:10px; color:var(--text); cursor:pointer; }
@@ -276,6 +278,7 @@ body { background: var(--bg); color: var(--text); font-family: 'Noto Sans JP', s
     </select>
     <div class="btn-row">
       <button class="btn-delete" id="btn-delete" onclick="deleteEvent()">削除</button>
+      <button class="btn-dup" id="btn-dup" onclick="dupEvent()">複製</button>
       <button class="btn-cancel" onclick="closeModal()">キャンセル</button>
       <button class="btn-save" onclick="saveEvent()">保存</button>
     </div>
@@ -550,6 +553,7 @@ function render(){
         document.getElementById('ed-place').value='atelier';
         document.getElementById('modal-title').textContent='イベント追加';
         document.getElementById('btn-delete').style.display='none';
+        document.getElementById('btn-dup').style.display='none';
         setCheckboxes(PAGE_FILTER?false:true, PAGE_FILTER==='shuto', PAGE_FILTER==='zastin', PAGE_FILTER==='issei');
         document.getElementById('modal-overlay').classList.add('open');
       }
@@ -706,6 +710,7 @@ function openModal(di,ei){
   document.getElementById('ed-place').value=ev.p||'atelier';
   document.getElementById('modal-title').textContent='イベント編集';
   document.getElementById('btn-delete').style.display='';
+  document.getElementById('btn-dup').style.display='';
   const w=ev.w||['all'];
   const isAll=w.includes('all');
   setCheckboxes(isAll, isAll||w.includes('shuto'), isAll||w.includes('zastin'), isAll||w.includes('issei'));
@@ -753,6 +758,18 @@ function deleteEvent(){
   toast('削除しました');
 }
 
+function dupEvent(){
+  if(!editTarget||editTarget.ei===-1)return;
+  const{di,ei}=editTarget;
+  const orig=evs[di][ei];
+  const copy=JSON.parse(JSON.stringify(orig));
+  evs[di].push(copy);
+  saveData();
+  render();
+  closeModal();
+  toast('複製しました');
+}
+
 function addEvent(){
   editTarget={di:0,ei:-1};
   document.getElementById('ed-title').value='';
@@ -764,6 +781,7 @@ function addEvent(){
   document.getElementById('ed-place').value='atelier';
   document.getElementById('modal-title').textContent='イベント追加';
   document.getElementById('btn-delete').style.display='none';
+  document.getElementById('btn-dup').style.display='none';
   setCheckboxes(PAGE_FILTER?false:true, PAGE_FILTER==='shuto', PAGE_FILTER==='zastin', PAGE_FILTER==='issei');
   document.getElementById('modal-overlay').classList.add('open');
 }
