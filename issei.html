@@ -138,25 +138,25 @@ body { background: var(--bg); color: var(--text); font-family: 'Noto Sans JP', s
 <div class="header"><h1>Issei — 週間スケジュール</h1><span class="ver">v10 — 2026/03/16　Issei個人スケジュール</span><div class="actions"><button onclick="addEvent()">＋ 追加</button><button onclick="overwriteDefault()">保存</button><button class="danger" onclick="resetData()">リセット</button></div></div>
 <div class="filter-bar" id="filter-member">
   <span class="filter-label">MEMBER:</span>
-  <span class="ftag ftag-all active" data-member="all" onclick="toggleMember(this)">ALL</span>
   <span class="ftag ftag-shuto active" data-member="shuto" onclick="toggleMember(this)">SHUTO</span>
-  <span class="ftag ftag-zastin active" data-member="zastin" onclick="toggleMember(this)">ZASTIN</span>
+  <span class="ftag ftag-all active" data-member="all" onclick="toggleMember(this)">ALL</span>
   <span class="ftag ftag-issei active" data-member="issei" onclick="toggleMember(this)">ISSEI</span>
+  <span class="ftag ftag-zastin active" data-member="zastin" onclick="toggleMember(this)">ZASTIN</span>
 </div>
 <div class="filter-bar" id="filter-floor">
   <span class="filter-label">FLOOR:</span>
   <span class="ftag ftag-cabinet active" data-floor="cabinet" onclick="toggleFloor(this)">5F CABINET</span>
   <span class="ftag ftag-atelier active" data-floor="atelier" onclick="toggleFloor(this)">5F ATELIER</span>
   <span class="ftag ftag-studio active" data-floor="studio" onclick="toggleFloor(this)">4F STUDIO</span>
-  <span class="ftag ftag-remote active" data-floor="remote" onclick="toggleFloor(this)">REMOTE</span>
   <span class="ftag ftag-fieldwork active" data-floor="fieldwork" onclick="toggleFloor(this)">FIELDWORK</span>
+  <span class="ftag ftag-remote active" data-floor="remote" onclick="toggleFloor(this)">REMOTE</span>
 </div>
 <div class="filter-bar" id="filter-task">
   <span class="filter-label">TASK:</span>
-  <span class="ftag ftag-board active" data-task="board" onclick="toggleTask(this)">ボードワーク</span>
   <span class="ftag ftag-design active" data-task="design" onclick="toggleTask(this)">個人ワーク</span>
+  <span class="ftag ftag-board active" data-task="board" onclick="toggleTask(this)">ボードワーク</span>
   <span class="ftag ftag-pry active" data-task="pry" onclick="toggleTask(this)">デザイン</span>
-  <span class="ftag ftag-mtg active" data-task="mtg" onclick="toggleTask(this)">外部MTG</span>
+  <span class="ftag ftag-mtg active" data-task="mtg" onclick="toggleTask(this)">デザインMTG</span>
   <span class="ftag ftag-yt active" data-task="yt" onclick="toggleTask(this)">撮影</span>
   <span class="ftag ftag-live active" data-task="live" onclick="toggleTask(this)">LIVE/販売</span>
   <span class="ftag ftag-notify active" data-task="notify" onclick="toggleTask(this)">配信・告知</span>
@@ -171,9 +171,9 @@ body { background: var(--bg); color: var(--text); font-family: 'Noto Sans JP', s
 <label>備考</label><input id="ed-note" placeholder="備考（サブテキスト）">
 <div class="time-row"><div><label>開始</label><input id="ed-start" type="time"></div><div><label>終了</label><input id="ed-end" type="time"></div></div>
 <label>曜日</label><select id="ed-day"><option value="0">月</option><option value="1">火</option><option value="2">水</option><option value="3">木</option><option value="4">金</option><option value="5">土</option><option value="6">日</option></select>
-<label>カテゴリ</label><select id="ed-cat"><option value="board">ボードワーク</option><option value="design">個人ワーク</option><option value="pry">デザイン</option><option value="mtg">外部MTG</option><option value="yt">撮影</option><option value="live">LIVE / 販売</option><option value="notify">配信・告知</option><option value="field">動画納品</option><option value="off">非稼働</option></select>
+<label>カテゴリ</label><select id="ed-cat"><option value="design">個人ワーク</option><option value="board">ボードワーク</option><option value="pry">デザイン</option><option value="mtg">デザインMTG</option><option value="yt">撮影</option><option value="live">LIVE / 販売</option><option value="notify">配信・告知</option><option value="field">動画納品</option><option value="off">非稼働</option><option value="rest">休憩</option></select>
 <label>担当</label><div class="who-checks" id="who-checks"><label><input type="checkbox" value="all" onchange="whoAllToggle(this)"> ALL</label><label><input type="checkbox" value="shuto"> Shuto</label><label><input type="checkbox" value="zastin"> Zastin</label><label><input type="checkbox" value="issei"> Issei</label></div>
-<label>場所</label><select id="ed-place"><option value="cabinet">5F CABINET</option><option value="atelier">5F ATELIER</option><option value="studio">4F STUDIO</option><option value="remote">REMOTE</option><option value="fieldwork">FIELDWORK</option></select>
+<label>場所</label><select id="ed-place"><option value="cabinet">5F CABINET</option><option value="atelier">5F ATELIER</option><option value="studio">4F STUDIO</option><option value="fieldwork">FIELDWORK</option><option value="remote">REMOTE</option></select>
 <div class="btn-row"><button class="btn-delete" id="btn-delete" onclick="deleteEvent()">削除</button><button class="btn-cancel" onclick="closeModal()">キャンセル</button><button class="btn-save" onclick="saveEvent()">保存</button></div>
 </div></div>
 <div class="toast" id="toast"></div>
@@ -261,9 +261,9 @@ let evs;
 let dragState=null;
 let editTarget=null;
 let dayBodies=[];
-const ALL_MEMBERS=['all','shuto','zastin','issei'];
-const ALL_FLOORS=['cabinet','atelier','studio','remote','fieldwork'];
-const ALL_TASKS=['board','design','pry','mtg','yt','live','notify','field','off'];
+const ALL_MEMBERS=['shuto','all','issei','zastin'];
+const ALL_FLOORS=['cabinet','atelier','studio','fieldwork','remote'];
+const ALL_TASKS=['design','board','pry','mtg','yt','live','notify','field','off'];
 let activeMembers=new Set(ALL_MEMBERS);
 let activeFloors=new Set(ALL_FLOORS);
 
