@@ -275,6 +275,23 @@ function timeToH(s){const[h,m]=s.split(':').map(Number);return h+m/60;}
 function hToTime(h){return fmt(h);}
 function toast(msg){const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),1800);}
 
+function layoutDay(dayEvs){
+  if(!dayEvs||!dayEvs.length)return;
+  dayEvs.forEach(ev=>{ev._col=0;ev._tc=1;});
+  const idx=dayEvs.map((_,i)=>i).sort((a,b)=>dayEvs[a].s-dayEvs[b].s||(dayEvs[b].e-dayEvs[b].s)-(dayEvs[a].e-dayEvs[a].s));
+  const ends=[];
+  idx.forEach(i=>{
+    const ev=dayEvs[i];let placed=false;
+    for(let c=0;c<ends.length;c++){if(ends[c]<=ev.s){ends[c]=ev.e;ev._col=c;placed=true;break;}}
+    if(!placed){ev._col=ends.length;ends.push(ev.e);}
+  });
+  idx.forEach(i=>{
+    const ev=dayEvs[i];let mx=ev._col;
+    dayEvs.forEach(o=>{if(o.s<ev.e&&o.e>ev.s)mx=Math.max(mx,o._col);});
+    ev._tc=mx+1;
+  });
+}
+
 function render(){
   const tbl=document.getElementById('timetable');
   tbl.innerHTML='';
@@ -316,6 +333,7 @@ function render(){
       body.appendChild(ln);
     }
 
+    layoutDay(evs[di]);
     (evs[di]||[]).forEach((ev,ei)=>{
       const el=mkEvent(ev,di,ei);
       body.appendChild(el);
@@ -374,7 +392,7 @@ function mkEvent(ev,di,ei){
   const height=Math.max((ev.e-ev.s)*PX-2,14);
   el.style.top=top+'px';
   el.style.height=height+'px';
-  if(ev.l)el.style.left=ev.l;
+  if(ev._tc>1){const w=100/ev._tc;el.style.left=`calc(${ev._col*w}% + 1px)`;el.style.width=`calc(${w}% - 2px)`;el.style.right='auto';}
   el.dataset.day=di;
   el.dataset.idx=ei;
   el.innerHTML=`<div class="ev-t">${ev.t}</div>${height>20?`<div class="ev-s">${ev.u||''}</div>`:''}<div class="resize-handle"></div>`;
