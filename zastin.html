@@ -19,16 +19,16 @@
   --pry-dim: rgba(74,128,208,0.18);
   --mtg: #50c8e0;
   --mtg-dim: rgba(80,200,224,0.18);
-  --yt: #d0b830;
-  --yt-dim: rgba(208,184,48,0.18);
-  --uni: #e0a030;
-  --uni-dim: rgba(224,160,48,0.18);
+  --yt: #e0a030;
+  --yt-dim: rgba(224,160,48,0.18);
+  --uni: #d0b830;
+  --uni-dim: rgba(208,184,48,0.18);
   --live: #dc4040;
   --live-dim: rgba(220,64,64,0.2);
   --notify: #40a860;
   --notify-dim: rgba(64,168,96,0.18);
-  --field: #2e8b57;
-  --field-dim: rgba(46,139,87,0.18);
+  --field: #1a6b40;
+  --field-dim: rgba(26,107,64,0.18);
   --free: #3a3a44;
   --free-dim: rgba(58,58,68,0.5);
   --off: #2a2a33;
@@ -64,17 +64,17 @@ body { background: var(--bg); color: var(--text); font-family: 'Noto Sans JP', s
 .ftag-atelier { background:rgba(144,128,216,.15); color:#b0a0e8; border-color:rgba(144,128,216,.3); }
 .ftag-studio { background:rgba(208,184,48,.15); color:#d0b830; border-color:rgba(208,184,48,.3); }
 .ftag-remote { background:rgba(64,168,96,.12); color:#60c880; border-color:rgba(64,168,96,.2); }
-.ftag-fieldwork { background:rgba(240,140,50,.15); color:#f0a050; border-color:rgba(240,140,50,.25); }
+.ftag-fieldwork { background:rgba(210,100,30,.18); color:#d27028; border-color:rgba(210,100,30,.35); }
 
 .ftag-board { background:var(--board-dim); color:#c0b4f0; border-color:rgba(144,128,216,.35); }
 .ftag-design { background:var(--design-dim); color:#fff; border-color:rgba(168,160,128,.4); }
 .ftag-pry { background:var(--pry-dim); color:#80b0e8; border-color:rgba(74,128,208,.3); }
 .ftag-mtg { background:var(--mtg-dim); color:#60d0e8; border-color:rgba(80,200,224,.3); }
-.ftag-yt { background:var(--yt-dim); color:#e0d070; border-color:rgba(208,184,48,.3); }
-.ftag-uni { background:var(--uni-dim); color:#e8b850; border-color:rgba(224,160,48,.3); }
+.ftag-yt { background:var(--yt-dim); color:#e8b850; border-color:rgba(224,160,48,.3); }
+.ftag-uni { background:var(--uni-dim); color:#e0d070; border-color:rgba(208,184,48,.3); }
 .ftag-live { background:var(--live-dim); color:#e86060; border-color:rgba(220,64,64,.3); }
 .ftag-notify { background:var(--notify-dim); color:#70d090; border-color:rgba(64,168,96,.3); }
-.ftag-field { background:var(--field-dim); color:#60c080; border-color:rgba(46,139,87,.3); }
+.ftag-field { background:var(--field-dim); color:#40a068; border-color:rgba(26,107,64,.3); }
 .ftag-off { background:var(--off-dim); color:#666; border-color:rgba(80,80,80,.3); }
 
 .container { padding:10px 8px 16px; overflow-x:auto; }
@@ -102,11 +102,11 @@ body { background: var(--bg); color: var(--text); font-family: 'Noto Sans JP', s
 .ev-design { background:var(--design-dim); border-color:var(--design); color:#fff; }
 .ev-pry    { background:var(--pry-dim);    border-color:var(--pry-c);  color:#80b0e8; }
 .ev-mtg    { background:var(--mtg-dim);    border-color:var(--mtg);    color:#60d0e8; }
-.ev-yt     { background:var(--yt-dim);     border-color:var(--yt);     color:#e0d070; }
-.ev-uni    { background:var(--uni-dim);    border-color:var(--uni);    color:#e8b850; }
+.ev-yt     { background:var(--yt-dim);     border-color:var(--yt);     color:#e8b850; }
+.ev-uni    { background:var(--uni-dim);    border-color:var(--uni);    color:#e0d070; }
 .ev-live   { background:var(--live-dim);   border-color:var(--live);   color:#e86060; }
 .ev-notify { background:var(--notify-dim); border-color:var(--notify); color:#70d090; }
-.ev-field  { background:var(--field-dim);  border-color:var(--field);  color:#60c080; }
+.ev-field  { background:var(--field-dim);  border-color:var(--field);  color:#40a068; }
 .ev-off    { background:var(--off-dim);    border-color:var(--off);    color:#555; }
 .ev-free   { background:var(--free-dim);   border-color:var(--free);   color:var(--text-dim); }
 .ev-move   { background:var(--move-dim);   border-color:var(--move);   color:var(--text-dim); }
@@ -161,8 +161,8 @@ body { background: var(--bg); color: var(--text); font-family: 'Noto Sans JP', s
   <span class="ftag ftag-board active" data-task="board" onclick="toggleTask(this)">ボードワーク</span>
   <span class="ftag ftag-pry active" data-task="pry" onclick="toggleTask(this)">デザイン</span>
   <span class="ftag ftag-mtg active" data-task="mtg" onclick="toggleTask(this)">デザインMTG</span>
-  <span class="ftag ftag-yt active" data-task="yt" onclick="toggleTask(this)">PRY撮影</span>
   <span class="ftag ftag-uni active" data-task="uni" onclick="toggleTask(this)">UNI撮影</span>
+  <span class="ftag ftag-yt active" data-task="yt" onclick="toggleTask(this)">PRY撮影</span>
   <span class="ftag ftag-live active" data-task="live" onclick="toggleTask(this)">LIVE/販売</span>
   <span class="ftag ftag-notify active" data-task="notify" onclick="toggleTask(this)">配信・告知</span>
   <span class="ftag ftag-field active" data-task="field" onclick="toggleTask(this)">動画納品</span>
@@ -176,7 +176,7 @@ body { background: var(--bg); color: var(--text); font-family: 'Noto Sans JP', s
 <label>備考</label><input id="ed-note" placeholder="備考（サブテキスト）">
 <div class="time-row"><div><label>開始</label><input id="ed-start" type="time"></div><div><label>終了</label><input id="ed-end" type="time"></div></div>
 <label>曜日</label><select id="ed-day"><option value="0">月</option><option value="1">火</option><option value="2">水</option><option value="3">木</option><option value="4">金</option><option value="5">土</option><option value="6">日</option></select>
-<label>カテゴリ</label><select id="ed-cat"><option value="design">個人ワーク</option><option value="board">ボードワーク</option><option value="pry">デザイン</option><option value="mtg">デザインMTG</option><option value="yt">PRY撮影</option><option value="uni">UNI撮影</option><option value="live">LIVE / 販売</option><option value="notify">配信・告知</option><option value="field">動画納品</option><option value="off">非稼働</option><option value="rest">休憩</option></select>
+<label>カテゴリ</label><select id="ed-cat"><option value="design">個人ワーク</option><option value="board">ボードワーク</option><option value="pry">デザイン</option><option value="mtg">デザインMTG</option><option value="uni">UNI撮影</option><option value="yt">PRY撮影</option><option value="live">LIVE / 販売</option><option value="notify">配信・告知</option><option value="field">動画納品</option><option value="off">非稼働</option><option value="rest">休憩</option></select>
 <label>担当</label><div class="who-checks" id="who-checks"><label><input type="checkbox" value="all" onchange="whoAllToggle(this)"> ALL</label><label><input type="checkbox" value="shuto"> Shuto</label><label><input type="checkbox" value="zastin"> Zastin</label><label><input type="checkbox" value="issei"> Issei</label></div>
 <label>場所</label><select id="ed-place"><option value="cabinet">5F CABINET</option><option value="atelier">5F ATELIER</option><option value="studio">4F STUDIO</option><option value="remote">REMOTE</option><option value="fieldwork">FIELDWORK</option></select>
 <div class="btn-row"><button class="btn-delete" id="btn-delete" onclick="deleteEvent()">削除</button><button class="btn-cancel" onclick="closeModal()">キャンセル</button><button class="btn-save" onclick="saveEvent()">保存</button></div>
@@ -268,7 +268,7 @@ let editTarget=null;
 let dayBodies=[];
 const ALL_MEMBERS=['shuto','all','issei','zastin'];
 const ALL_FLOORS=['cabinet','atelier','studio','remote','fieldwork'];
-const ALL_TASKS=['design','board','pry','mtg','yt','uni','live','notify','field','off'];
+const ALL_TASKS=['design','board','pry','mtg','uni','yt','live','notify','field','off'];
 let activeMembers=new Set(ALL_MEMBERS);
 let activeFloors=new Set(ALL_FLOORS);
 
