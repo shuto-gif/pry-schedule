@@ -64,6 +64,7 @@ body { background: var(--bg); color: var(--text); font-family: 'Noto Sans JP', s
 .day-theme { font-size:8px; font-weight:300; color:var(--text-dim); margin-top:1px; }
 .day-body { position:relative; }
 .hline { position:absolute; left:0; right:0; height:1px; background:var(--border); opacity:.35; }
+.day-body { cursor:crosshair; }
 
 .ev { position:absolute; left:2px; right:2px; border-radius:3px; padding:2px 4px; font-size:8px; line-height:1.25; overflow:hidden; border-left:2px solid; cursor:grab; transition: box-shadow .12s; z-index:1; }
 .ev:hover { box-shadow:0 4px 16px rgba(0,0,0,.4); z-index:5; }
@@ -323,6 +324,46 @@ function render(){
     col.appendChild(body);
     tbl.appendChild(col);
     dayBodies.push(body);
+
+    body.addEventListener('mousedown',function(evt){
+      if(evt.button!==0||evt.target.closest('.ev'))return;
+      evt.preventDefault();
+      const rect=body.getBoundingClientRect();
+      const y0=evt.clientY-rect.top;
+      let s0=snap(SH+y0/PX); s0=Math.max(SH,Math.min(EH-SNAP,s0));
+      let e0=s0+SNAP;
+      const pv=document.createElement('div');
+      pv.className='ev ev-pry';
+      pv.style.cssText=`top:${(s0-SH)*PX}px;height:${SNAP*PX}px;opacity:.55;z-index:50;pointer-events:none`;
+      pv.innerHTML=`<div class="ev-t">${fmt(s0)} 〜 ${fmt(e0)}</div>`;
+      body.appendChild(pv);
+      function onM(e2){
+        const y2=e2.clientY-rect.top;
+        e0=snap(SH+y2/PX);
+        if(e0<s0+SNAP)e0=s0+SNAP; if(e0>EH)e0=EH;
+        pv.style.height=Math.max((e0-s0)*PX-2,14)+'px';
+        pv.innerHTML=`<div class="ev-t">${fmt(s0)} 〜 ${fmt(e0)}</div>`;
+      }
+      function onU(){
+        document.removeEventListener('mousemove',onM);
+        document.removeEventListener('mouseup',onU);
+        if(body.contains(pv))body.removeChild(pv);
+        editTarget={di,ei:-1};
+        document.getElementById('ed-title').value='';
+        document.getElementById('ed-note').value='';
+        document.getElementById('ed-start').value=hToTime(s0);
+        document.getElementById('ed-end').value=hToTime(e0);
+        document.getElementById('ed-day').value=di;
+        document.getElementById('ed-cat').value='pry';
+        document.getElementById('modal-title').textContent='イベント追加';
+        document.getElementById('btn-delete').style.display='none';
+        if(CUR_PAGE==='main') setCheckboxes(true,false,false,false);
+        else setCheckboxes(false,CUR_PAGE==='shuto',CUR_PAGE==='zastin',CUR_PAGE==='issei');
+        document.getElementById('modal-overlay').classList.add('open');
+      }
+      document.addEventListener('mousemove',onM);
+      document.addEventListener('mouseup',onU);
+    });
   });
 }
 
