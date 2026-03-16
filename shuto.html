@@ -303,8 +303,11 @@ function getVisible(di){
       if(!w.includes('all')&&!w.includes(PAGE_FILTER))return false;
     }
     if(activeMembers.size<ALL_MEMBERS.length){
-      const w=ev.w||['all'];
-      if(!w.some(m=>activeMembers.has(m)))return false;
+      if(activeMembers.has('all')){}
+      else{
+        const w=ev.w||['all'];
+        if(!w.includes('all')&&!w.some(m=>activeMembers.has(m)))return false;
+      }
     }
     if(activeFloors.size<ALL_FLOORS.length){
       if(!activeFloors.has(ev.p||'atelier'))return false;
