@@ -110,6 +110,10 @@ body { background: var(--bg); color: var(--text); font-family: 'Noto Sans JP', s
 .modal .btn-delete { background:transparent; color:#e85d5d; border-color:#e85d5d; margin-right:auto; }
 .modal .btn-delete:hover { background:rgba(232,93,93,.15); }
 
+.check-row { display:flex; gap:14px; margin-top:4px; flex-wrap:wrap; }
+.check-item { display:flex; align-items:center; gap:4px; font-size:10px; color:var(--text); cursor:pointer; }
+.check-item input[type="checkbox"] { accent-color:var(--pry); width:14px; height:14px; cursor:pointer; }
+
 .toast { position:fixed; bottom:20px; right:20px; background:var(--surface2); border:1px solid var(--pry); border-radius:6px; padding:8px 16px; font-size:10px; color:var(--pry); z-index:300; opacity:0; transition:opacity .3s; pointer-events:none; }
 .toast.show { opacity:1; }
 </style>
@@ -154,7 +158,14 @@ body { background: var(--bg); color: var(--text); font-family: 'Noto Sans JP', s
     <h3 id="modal-title">イベント編集</h3>
     <label>タイトル</label>
     <input type="text" id="ed-title">
-    <label>担当 / メモ</label>
+    <label>反映先</label>
+    <div class="check-row">
+      <label class="check-item"><input type="checkbox" id="cb-all"> all</label>
+      <label class="check-item"><input type="checkbox" id="cb-shuto"> shuto</label>
+      <label class="check-item"><input type="checkbox" id="cb-zastin"> zastin</label>
+      <label class="check-item"><input type="checkbox" id="cb-issei"> issei</label>
+    </div>
+    <label>メモ</label>
     <input type="text" id="ed-note">
     <div class="time-row">
       <div><label>開始</label><input type="time" id="ed-start" step="900"></div>
@@ -259,6 +270,8 @@ const DEFAULT_EVS = [
 ];
 
 const LS_KEY='pry-schedule-v10-shuto';
+const ALL_LS={main:'pry-schedule-v10',shuto:'pry-schedule-v10-shuto',zastin:'pry-schedule-v10-zastin',issei:'pry-schedule-v10-issei'};
+const CUR_PAGE='shuto';
 let evs;
 let dragState=null;
 let editTarget=null;
@@ -447,6 +460,13 @@ function getBodyUnder(x){
   return null;
 }
 
+function setCheckboxes(all,sh,za,is){
+  document.getElementById('cb-all').checked=all;
+  document.getElementById('cb-shuto').checked=all||sh;
+  document.getElementById('cb-zastin').checked=all||za;
+  document.getElementById('cb-issei').checked=all||is;
+}
+
 function openModal(di,ei){
   editTarget={di,ei};
   const ev=evs[di][ei];
@@ -458,12 +478,43 @@ function openModal(di,ei){
   document.getElementById('ed-cat').value=ev.c;
   document.getElementById('modal-title').textContent='イベント編集';
   document.getElementById('btn-delete').style.display='';
+  if(CUR_PAGE==='main') setCheckboxes(true,false,false,false);
+  else setCheckboxes(false,CUR_PAGE==='shuto',CUR_PAGE==='zastin',CUR_PAGE==='issei');
   document.getElementById('modal-overlay').classList.add('open');
 }
 
 function closeModal(){
   document.getElementById('modal-overlay').classList.remove('open');
   editTarget=null;
+}
+
+function getTargetKeys(){
+  const targets=new Set();
+  targets.add(ALL_LS[CUR_PAGE]);
+  if(document.getElementById('cb-all').checked){
+    Object.values(ALL_LS).forEach(k=>targets.add(k));
+  } else {
+    if(document.getElementById('cb-shuto').checked) targets.add(ALL_LS.shuto);
+    if(document.getElementById('cb-zastin').checked) targets.add(ALL_LS.zastin);
+    if(document.getElementById('cb-issei').checked) targets.add(ALL_LS.issei);
+  }
+  return [...targets];
+}
+
+function syncToOtherCalendars(newEv,newDi,skipKey){
+  const targets=getTargetKeys().filter(k=>k!==skipKey);
+  let count=0;
+  targets.forEach(key=>{
+    const raw=localStorage.getItem(key);
+    let data;
+    try{data=raw?JSON.parse(raw):null;}catch(ex){data=null;}
+    if(!data){data=[[],[],[],[],[],[],[]]}
+    if(!data[newDi])data[newDi]=[];
+    data[newDi].push({...newEv});
+    localStorage.setItem(key,JSON.stringify(data));
+    count++;
+  });
+  return count;
 }
 
 function saveEvent(){
@@ -476,10 +527,12 @@ function saveEvent(){
   const cat=document.getElementById('ed-cat').value;
   if(e<=s){toast('終了は開始より後に');return;}
 
+  const newEv={s,e,t:title,u:note,c:cat};
+
   if(editTarget){
     const {di,ei}=editTarget;
     if(ei===-1){
-      evs[newDi].push({s,e,t:title,u:note,c:cat});
+      evs[newDi].push({...newEv});
     } else {
       const ev=evs[di][ei];
       ev.t=title;ev.u=note;ev.s=s;ev.e=e;ev.c=cat;
@@ -490,9 +543,10 @@ function saveEvent(){
     }
   }
   saveData();
+  const synced=syncToOtherCalendars(newEv,newDi,ALL_LS[CUR_PAGE]);
   render();
   closeModal();
-  toast('保存しました');
+  toast(synced>0?`保存（${synced}件のカレンダーに同期）`:'保存しました');
 }
 
 function deleteEvent(){
@@ -516,6 +570,8 @@ function addEvent(){
   document.getElementById('ed-cat').value='pry';
   document.getElementById('modal-title').textContent='イベント追加';
   document.getElementById('btn-delete').style.display='none';
+  if(CUR_PAGE==='main') setCheckboxes(true,false,false,false);
+  else setCheckboxes(false,CUR_PAGE==='shuto',CUR_PAGE==='zastin',CUR_PAGE==='issei');
   document.getElementById('modal-overlay').classList.add('open');
 }
 
@@ -532,6 +588,19 @@ document.getElementById('modal-overlay').addEventListener('click',e=>{
 });
 document.addEventListener('keydown',e=>{
   if(e.key==='Escape')closeModal();
+});
+
+document.getElementById('cb-all').addEventListener('change',function(){
+  const c=this.checked;
+  document.getElementById('cb-shuto').checked=c;
+  document.getElementById('cb-zastin').checked=c;
+  document.getElementById('cb-issei').checked=c;
+});
+['cb-shuto','cb-zastin','cb-issei'].forEach(id=>{
+  document.getElementById(id).addEventListener('change',function(){
+    if(!this.checked) document.getElementById('cb-all').checked=false;
+    else if(document.getElementById('cb-shuto').checked&&document.getElementById('cb-zastin').checked&&document.getElementById('cb-issei').checked) document.getElementById('cb-all').checked=true;
+  });
 });
 
 loadData();
