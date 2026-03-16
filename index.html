@@ -59,7 +59,9 @@ body { background: var(--bg); color: var(--text); font-family: 'Noto Sans JP', s
 
 .floor-legend { padding:6px 20px; display:flex; gap:16px; flex-wrap:wrap; border-bottom:1px solid var(--border); align-items:center; }
 .floor-legend-title { font-size:8px; color:var(--text-dim); font-weight:600; letter-spacing:.06em; }
-.floor-tag { font-family:'DM Mono',monospace; font-size:7px; padding:1px 5px; border-radius:2px; letter-spacing:.04em; }
+.floor-tag { font-family:'DM Mono',monospace; font-size:7px; padding:1px 5px; border-radius:2px; letter-spacing:.04em; cursor:pointer; transition:all .15s; opacity:.6; }
+.floor-tag:hover { opacity:1; }
+.floor-tag.active { opacity:1; box-shadow:0 0 0 1px currentColor; }
 .floor-tag-studio { background:rgba(201,168,76,.2); color:#c9a84c; border:1px solid rgba(201,168,76,.3); }
 .floor-tag-atelier { background:rgba(91,141,239,.15); color:#7ba8f5; border:1px solid rgba(91,141,239,.25); }
 .floor-tag-cabinet { background:rgba(168,130,255,.15); color:#b8a0ff; border:1px solid rgba(168,130,255,.25); }
@@ -168,13 +170,13 @@ body { background: var(--bg); color: var(--text); font-family: 'Noto Sans JP', s
   <div class="legend-item"><div class="legend-dot" style="background:var(--notify)"></div>配信・告知・YT公開</div>
   <div class="legend-item"><div class="legend-dot" style="background:var(--field)"></div>動画納品（前日19:00締切）</div>
 </div>
-<div class="floor-legend">
+<div class="floor-legend" id="floor-legend">
   <span class="floor-legend-title">FLOOR:</span>
-  <span class="floor-tag floor-tag-studio">4F STUDIO</span>
-  <span class="floor-tag floor-tag-atelier">5F ATELIER</span>
-  <span class="floor-tag floor-tag-cabinet">5F CABINET</span>
-  <span class="floor-tag floor-tag-remote">REMOTE</span>
-  <span class="floor-tag floor-tag-online">ONLINE</span>
+  <span class="floor-tag floor-tag-studio active" data-floor="studio" onclick="toggleFloor(this)">4F STUDIO</span>
+  <span class="floor-tag floor-tag-atelier active" data-floor="atelier" onclick="toggleFloor(this)">5F ATELIER</span>
+  <span class="floor-tag floor-tag-cabinet active" data-floor="cabinet" onclick="toggleFloor(this)">5F CABINET</span>
+  <span class="floor-tag floor-tag-remote active" data-floor="remote" onclick="toggleFloor(this)">REMOTE</span>
+  <span class="floor-tag floor-tag-online active" data-floor="online" onclick="toggleFloor(this)">ONLINE</span>
 </div>
 
 <div class="container">
@@ -344,6 +346,7 @@ let evs;
 let dragState=null;
 let editTarget=null;
 let dayBodies=[];
+let activeFloors=new Set(['studio','atelier','cabinet','remote','online']);
 
 function deepClone(o){return JSON.parse(JSON.stringify(o));}
 
@@ -368,10 +371,36 @@ function saveData(){localStorage.setItem(LS_KEY,JSON.stringify(evs));}
 function getVisible(di){
   if(!evs[di])return[];
   return evs[di].map((ev,i)=>({ev,oi:i})).filter(({ev})=>{
-    if(!PAGE_FILTER)return true;
-    const w=ev.w||['all'];
-    return w.includes('all')||w.includes(PAGE_FILTER);
+    if(PAGE_FILTER){
+      const w=ev.w||['all'];
+      if(!w.includes('all')&&!w.includes(PAGE_FILTER))return false;
+    }
+    if(activeFloors.size<5){
+      const p=ev.p||'atelier';
+      if(!activeFloors.has(p))return false;
+    }
+    return true;
   });
+}
+
+function toggleFloor(el){
+  const f=el.dataset.floor;
+  const allTags=document.querySelectorAll('.floor-tag[data-floor]');
+  const allActive=activeFloors.size===5;
+  if(allActive){
+    activeFloors=new Set([f]);
+    allTags.forEach(t=>t.classList.toggle('active',t.dataset.floor===f));
+  } else if(activeFloors.has(f)&&activeFloors.size===1){
+    activeFloors=new Set(['studio','atelier','cabinet','remote','online']);
+    allTags.forEach(t=>t.classList.add('active'));
+  } else if(activeFloors.has(f)){
+    activeFloors.delete(f);
+    el.classList.remove('active');
+  } else {
+    activeFloors.add(f);
+    el.classList.add('active');
+  }
+  render();
 }
 
 function snap(v){return Math.round(v/SNAP)*SNAP;}
