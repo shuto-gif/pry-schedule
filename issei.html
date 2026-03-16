@@ -58,6 +58,15 @@ body { background: var(--bg); color: var(--text); font-family: 'Noto Sans JP', s
 .legend-item { display:flex; align-items:center; gap:4px; font-size:9px; color:var(--text-dim); }
 .legend-dot { width:8px; height:8px; border-radius:2px; }
 
+.floor-legend { padding:6px 20px; display:flex; gap:16px; flex-wrap:wrap; border-bottom:1px solid var(--border); align-items:center; }
+.floor-legend-title { font-size:8px; color:var(--text-dim); font-weight:600; letter-spacing:.06em; }
+.floor-tag { font-family:'DM Mono',monospace; font-size:7px; padding:1px 5px; border-radius:2px; letter-spacing:.04em; }
+.floor-tag-studio { background:rgba(201,168,76,.2); color:#c9a84c; border:1px solid rgba(201,168,76,.3); }
+.floor-tag-atelier { background:rgba(91,141,239,.15); color:#7ba8f5; border:1px solid rgba(91,141,239,.25); }
+.floor-tag-cabinet { background:rgba(168,130,255,.15); color:#b8a0ff; border:1px solid rgba(168,130,255,.25); }
+.floor-tag-remote { background:rgba(100,200,140,.12); color:#6fcf97; border:1px solid rgba(100,200,140,.2); }
+.floor-tag-online { background:rgba(255,255,255,.06); color:#777; border:1px solid rgba(255,255,255,.1); }
+
 .container { padding:10px 8px 16px; overflow-x:auto; }
 
 .timetable { display: grid; grid-template-columns: 38px repeat(7, 1fr); }
@@ -75,6 +84,7 @@ body { background: var(--bg); color: var(--text); font-family: 'Noto Sans JP', s
 .ev.dragging { opacity:.85; z-index:50; cursor:grabbing; box-shadow:0 8px 30px rgba(0,0,0,.6); }
 .ev-t { font-weight:600; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; pointer-events:none; }
 .ev-s { font-weight:300; color:var(--text-dim); font-size:7px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; pointer-events:none; }
+.ev-p { font-family:'DM Mono',monospace; font-size:6px; letter-spacing:.03em; opacity:.7; pointer-events:none; }
 .ev .resize-handle { position:absolute; bottom:0; left:0; right:0; height:6px; cursor:ns-resize; }
 .ev .resize-handle:hover { background:rgba(255,255,255,.08); }
 
@@ -146,6 +156,14 @@ body { background: var(--bg); color: var(--text); font-family: 'Noto Sans JP', s
   <div class="legend-item"><div class="legend-dot" style="background:var(--notify)"></div>配信・告知</div>
   <div class="legend-item"><div class="legend-dot" style="background:var(--field)"></div>動画納品（前日19:00締切）</div>
 </div>
+<div class="floor-legend">
+  <span class="floor-legend-title">FLOOR:</span>
+  <span class="floor-tag floor-tag-studio">4F STUDIO</span>
+  <span class="floor-tag floor-tag-atelier">5F ATELIER</span>
+  <span class="floor-tag floor-tag-cabinet">5F CABINET</span>
+  <span class="floor-tag floor-tag-remote">REMOTE</span>
+  <span class="floor-tag floor-tag-online">ONLINE</span>
+</div>
 
 <div class="container">
   <div class="timetable" id="timetable"></div>
@@ -190,6 +208,14 @@ body { background: var(--bg); color: var(--text); font-family: 'Noto Sans JP', s
       <option value="off">非稼働</option>
       <option value="rest">休憩</option>
     </select>
+    <label>場所</label>
+    <select id="ed-place">
+      <option value="studio">4F STUDIO</option>
+      <option value="atelier">5F ATELIER</option>
+      <option value="cabinet">5F CABINET</option>
+      <option value="remote">REMOTE</option>
+      <option value="online">ONLINE</option>
+    </select>
     <div class="btn-row">
       <button class="btn-delete" id="btn-delete" onclick="deleteEvent()">削除</button>
       <button class="btn-cancel" onclick="closeModal()">キャンセル</button>
@@ -213,67 +239,69 @@ const dayMeta=[
   {th:'非稼働',c:'#555'},
 ];
 
+const PLACE_LABELS={studio:'4F',atelier:'5F',cabinet:'CAB',remote:'REM',online:'ONL'};
+
 const PAGE_FILTER = 'issei';
 
 const DEFAULT_EVS = [
   [
-    {s:8,e:9,t:'サンプル進捗ボード更新・アイテム管理',u:'',c:'board',w:['issei']},
-    {s:8,e:14,t:'スチール/ムービー撮影',u:'角田さん or 平永さん（隔週ローテ）',c:'pry',w:['all']},
-    {s:12,e:15,t:'UNIブレスト/台本',u:'',c:'yt',w:['shuto','zastin']},
-    {s:12,e:14,t:'サンプルKANBAN更新&アイテム管理',u:'',c:'board',w:['issei']},
-    {s:14,e:15,t:'サンプル指示出し確認',u:'',c:'pry',w:['shuto','issei']},
-    {s:15,e:18,t:'UNI撮影',u:'',c:'yt',w:['shuto','zastin']},
-    {s:15,e:18,t:'UNI撮影補助&ECページ完成',u:'',c:'notify',w:['issei']},
-    {s:19,e:19.5,t:'📢 YTコミュ配信',u:'LIVE&販売告知',c:'notify',w:['zastin']},
-    {s:20.25,e:20.5,t:'📢 LINE配信',u:'LIVE&販売告知',c:'notify',w:['all']},
-    {s:20.5,e:21.33,t:'🔴 発売直前LIVE',u:'',c:'live',w:['all']},
-    {s:21,e:22,t:'🔴 PRY新作発売',u:'1h限定受注 — 零点通過',c:'live',w:['all']},
-    {s:22.33,e:23,t:'ボード再設計&後片付け',u:'',c:'board',w:['all']},
+    {s:8,e:9,t:'サンプル進捗ボード更新・アイテム管理',u:'',c:'board',w:['issei'],p:'atelier'},
+    {s:8,e:14,t:'スチール/ムービー撮影',u:'角田さん or 平永さん（隔週ローテ）',c:'pry',w:['all'],p:'studio'},
+    {s:12,e:15,t:'UNIブレスト/台本',u:'',c:'yt',w:['shuto','zastin'],p:'atelier'},
+    {s:12,e:14,t:'サンプルKANBAN更新&アイテム管理',u:'',c:'board',w:['issei'],p:'atelier'},
+    {s:14,e:15,t:'サンプル指示出し確認',u:'',c:'pry',w:['shuto','issei'],p:'atelier'},
+    {s:15,e:18,t:'UNI撮影',u:'',c:'yt',w:['shuto','zastin'],p:'studio'},
+    {s:15,e:18,t:'UNI撮影補助&ECページ完成',u:'',c:'notify',w:['issei'],p:'studio'},
+    {s:19,e:19.5,t:'📢 YTコミュ配信',u:'LIVE&販売告知',c:'notify',w:['zastin'],p:'online'},
+    {s:20.25,e:20.5,t:'📢 LINE配信',u:'LIVE&販売告知',c:'notify',w:['all'],p:'online'},
+    {s:20.5,e:21.33,t:'🔴 発売直前LIVE',u:'',c:'live',w:['all'],p:'studio'},
+    {s:21,e:22,t:'🔴 PRY新作発売',u:'1h限定受注 — 零点通過',c:'live',w:['all'],p:'online'},
+    {s:22.33,e:23,t:'ボード再設計&後片付け',u:'',c:'board',w:['all'],p:'atelier'},
   ],
   [
-    {s:11,e:12,t:'ボードワーク',u:'一人',c:'board',w:['shuto']},
-    {s:12,e:16,t:'ボードワーク',u:'',c:'board',w:['all']},
-    {s:17,e:18,t:'サンプル進捗ボード更新・アイテム管理',u:'',c:'board',w:['issei']},
-    {s:18,e:19,t:'🎬 水曜UNI動画 納品',u:'19:00締切 素材＋編集済',c:'field',w:['all']},
-    {s:18,e:21,t:'PRY撮影',u:'',c:'pry',w:['shuto','zastin']},
+    {s:11,e:12,t:'ボードワーク',u:'一人',c:'board',w:['shuto'],p:'cabinet'},
+    {s:12,e:16,t:'ボードワーク',u:'',c:'board',w:['all'],p:'atelier'},
+    {s:17,e:18,t:'サンプル進捗ボード更新・アイテム管理',u:'',c:'board',w:['issei'],p:'atelier'},
+    {s:18,e:19,t:'🎬 水曜UNI動画 納品',u:'19:00締切 素材＋編集済',c:'field',w:['all'],p:'online'},
+    {s:18,e:21,t:'PRY撮影',u:'',c:'pry',w:['shuto','zastin'],p:'studio'},
   ],
   [
-    {s:10,e:21,t:'個人ワーク（リモート）',u:'デザイン[shuto] / サムネ[zastin] / 生産管理[issei]',c:'design',w:['all']},
-    {s:18,e:19,t:'🎬 木曜UNI動画 納品',u:'19:00締切 素材＋編集済',c:'field',w:['all']},
-    {s:19,e:19.5,t:'📢 UNI動画更新（YT）',u:'',c:'notify',w:['all']},
+    {s:10,e:21,t:'個人ワーク（リモート）',u:'デザイン[shuto] / サムネ[zastin] / 生産管理[issei]',c:'design',w:['all'],p:'remote'},
+    {s:18,e:19,t:'🎬 木曜UNI動画 納品',u:'19:00締切 素材＋編集済',c:'field',w:['all'],p:'online'},
+    {s:19,e:19.5,t:'📢 UNI動画更新（YT）',u:'',c:'notify',w:['all'],p:'online'},
   ],
   [
-    {s:8,e:9,t:'サムネチェック＆修正',u:'',c:'yt',w:['shuto','zastin']},
-    {s:8,e:9,t:'サンプル進捗ボード更新・アイテム管理',u:'',c:'board',w:['issei']},
-    {s:9,e:10,t:'デザインボード＆チューニング&アイテム管理',u:'',c:'board',w:['all']},
-    {s:10,e:13,t:'SR MTG（対面）',u:'デザイン[shuto] / 生産管理[issei] / 撮影&サムネ[zastin]',c:'mtg',w:['all']},
-    {s:13,e:15,t:'CO MTG（対面）',u:'デザイン[shuto] / 生産管理[issei] / 撮影&サムネ[zastin]',c:'mtg',w:['all']},
-    {s:15,e:19,t:'業務委託デザインMTG変動枠&ボード再設計',u:'',c:'mtg',w:['shuto','issei']},
-    {s:18,e:19,t:'🎬 金曜PRY動画 納品',u:'19:00締切 素材＋編集済',c:'field',w:['all']},
-    {s:19,e:19.5,t:'📢 UNI動画更新（YT）',u:'',c:'notify',w:['all']},
-    {s:19,e:21,t:'全サムネ完成',u:'',c:'yt',w:['shuto','zastin']},
+    {s:8,e:9,t:'サムネチェック＆修正',u:'',c:'yt',w:['shuto','zastin'],p:'atelier'},
+    {s:8,e:9,t:'サンプル進捗ボード更新・アイテム管理',u:'',c:'board',w:['issei'],p:'atelier'},
+    {s:9,e:10,t:'デザインボード＆チューニング&アイテム管理',u:'',c:'board',w:['all'],p:'atelier'},
+    {s:10,e:13,t:'SR MTG（対面）',u:'デザイン[shuto] / 生産管理[issei] / 撮影&サムネ[zastin]',c:'mtg',w:['all'],p:'atelier'},
+    {s:13,e:15,t:'CO MTG（対面）',u:'デザイン[shuto] / 生産管理[issei] / 撮影&サムネ[zastin]',c:'mtg',w:['all'],p:'atelier'},
+    {s:15,e:19,t:'業務委託デザインMTG変動枠&ボード再設計',u:'',c:'mtg',w:['shuto','issei'],p:'atelier'},
+    {s:18,e:19,t:'🎬 金曜PRY動画 納品',u:'19:00締切 素材＋編集済',c:'field',w:['all'],p:'online'},
+    {s:19,e:19.5,t:'📢 UNI動画更新（YT）',u:'',c:'notify',w:['all'],p:'online'},
+    {s:19,e:21,t:'全サムネ完成',u:'',c:'yt',w:['shuto','zastin'],p:'atelier'},
   ],
   [
-    {s:9,e:13,t:'PRYブレスト・構成確定',u:'',c:'pry',w:['shuto','zastin']},
-    {s:14,e:16.5,t:'UNI市場環境調査',u:'',c:'yt',w:['shuto','zastin']},
-    {s:16.5,e:18,t:'UNIブレスト/台本',u:'',c:'yt',w:['shuto','zastin']},
-    {s:17,e:18,t:'サンプル進捗ボード更新・アイテム管理',u:'',c:'board',w:['issei']},
-    {s:18,e:19,t:'🎬 土曜UNI動画 納品',u:'19:00締切 素材＋編集済',c:'field',w:['all']},
-    {s:18,e:20,t:'UNI撮影',u:'',c:'yt',w:['shuto','zastin']},
-    {s:19,e:19.5,t:'📢 PRY動画更新（YT）',u:'',c:'pry',w:['all']},
-    {s:20,e:20.5,t:'📢 PRY新作ページ公開',u:'EC',c:'notify',w:['all']},
+    {s:9,e:13,t:'PRYブレスト・構成確定',u:'',c:'pry',w:['shuto','zastin'],p:'atelier'},
+    {s:14,e:16.5,t:'UNI市場環境調査',u:'',c:'yt',w:['shuto','zastin'],p:'atelier'},
+    {s:16.5,e:18,t:'UNIブレスト/台本',u:'',c:'yt',w:['shuto','zastin'],p:'atelier'},
+    {s:17,e:18,t:'サンプル進捗ボード更新・アイテム管理',u:'',c:'board',w:['issei'],p:'atelier'},
+    {s:18,e:19,t:'🎬 土曜UNI動画 納品',u:'19:00締切 素材＋編集済',c:'field',w:['all'],p:'online'},
+    {s:18,e:20,t:'UNI撮影',u:'',c:'yt',w:['shuto','zastin'],p:'studio'},
+    {s:19,e:19.5,t:'📢 PRY動画更新（YT）',u:'',c:'pry',w:['all'],p:'online'},
+    {s:20,e:20.5,t:'📢 PRY新作ページ公開',u:'EC',c:'notify',w:['all'],p:'online'},
   ],
   [
-    {s:10,e:21,t:'個人ワーク or イベント',u:'戦略&デザイン[shuto] / 告知予約[zastin] / LINE対応[issei]',c:'design',w:['all']},
-    {s:18,e:19,t:'🎬 日曜UNI動画 納品',u:'19:00締切 素材＋編集済',c:'field',w:['all']},
-    {s:19,e:19.5,t:'📢 UNI動画更新（YT）',u:'',c:'notify',w:['all']},
+    {s:10,e:21,t:'個人ワーク or イベント',u:'戦略&デザイン[shuto] / 告知予約[zastin] / LINE対応[issei]',c:'design',w:['all'],p:'remote'},
+    {s:18,e:19,t:'🎬 日曜UNI動画 納品',u:'19:00締切 素材＋編集済',c:'field',w:['all'],p:'online'},
+    {s:19,e:19.5,t:'📢 UNI動画更新（YT）',u:'',c:'notify',w:['all'],p:'online'},
   ],
   [
-    {s:8,e:24,t:'非稼働',u:'予約配信のみ',c:'off',w:['all']},
-    {s:12,e:12.5,t:'📢 メルマガ配信',u:'予約',c:'notify',w:['all']},
-    {s:19,e:19.5,t:'📢 UNI動画更新（YT）',u:'予約',c:'notify',w:['all']},
-    {s:20,e:20.5,t:'📢 YTコミュニティ投稿',u:'予約',c:'notify',w:['all']},
-    {s:21,e:21.5,t:'📢 LINE配信',u:'予約',c:'notify',w:['all']},
+    {s:8,e:24,t:'非稼働',u:'予約配信のみ',c:'off',w:['all'],p:'online'},
+    {s:12,e:12.5,t:'📢 メルマガ配信',u:'予約',c:'notify',w:['all'],p:'online'},
+    {s:19,e:19.5,t:'📢 UNI動画更新（YT）',u:'予約',c:'notify',w:['all'],p:'online'},
+    {s:20,e:20.5,t:'📢 YTコミュニティ投稿',u:'予約',c:'notify',w:['all'],p:'online'},
+    {s:21,e:21.5,t:'📢 LINE配信',u:'予約',c:'notify',w:['all'],p:'online'},
   ],
 ];
 
@@ -290,7 +318,10 @@ function loadData(){
   if(raw){
     try{
       evs=JSON.parse(raw);
-      evs.forEach(d=>d.forEach(ev=>{if(!ev.w)ev.w=['all'];}));
+      evs.forEach(d=>d.forEach(ev=>{
+        if(!ev.w)ev.w=['all'];
+        if(!ev.p)ev.p='atelier';
+      }));
     }catch(e){evs=deepClone(DEFAULT_EVS);}
   } else {
     evs=deepClone(DEFAULT_EVS);
@@ -415,6 +446,7 @@ function render(){
         document.getElementById('ed-end').value=hToTime(e0);
         document.getElementById('ed-day').value=di;
         document.getElementById('ed-cat').value='pry';
+        document.getElementById('ed-place').value='atelier';
         document.getElementById('modal-title').textContent='イベント追加';
         document.getElementById('btn-delete').style.display='none';
         setCheckboxes(PAGE_FILTER?false:true, PAGE_FILTER==='shuto', PAGE_FILTER==='zastin', PAGE_FILTER==='issei');
@@ -438,7 +470,12 @@ function mkEvent(ev,di,ei){
   el.dataset.idx=ei;
 
   const wTag=ev.w&&!ev.w.includes('all')?` [${ev.w.join(',')}]`:'';
-  el.innerHTML=`<div class="ev-t">${ev.t}${wTag}</div>${height>20?`<div class="ev-s">${ev.u||''}</div>`:''}<div class="resize-handle"></div>`;
+  const pTag=PLACE_LABELS[ev.p]||'';
+  let inner=`<div class="ev-t">${ev.t}${wTag}</div>`;
+  if(height>28) inner+=`<div class="ev-s">${ev.u||''}</div><div class="ev-p">${pTag}</div>`;
+  else if(height>20) inner+=`<div class="ev-s">${pTag}${ev.u?' — '+ev.u:''}</div>`;
+  inner+='<div class="resize-handle"></div>';
+  el.innerHTML=inner;
 
   el.addEventListener('mousedown',e=>{
     if(e.target.classList.contains('resize-handle')) startResize(e,di,ei,el);
@@ -565,6 +602,7 @@ function openModal(di,ei){
   document.getElementById('ed-end').value=hToTime(ev.e);
   document.getElementById('ed-day').value=di;
   document.getElementById('ed-cat').value=ev.c;
+  document.getElementById('ed-place').value=ev.p||'atelier';
   document.getElementById('modal-title').textContent='イベント編集';
   document.getElementById('btn-delete').style.display='';
   const w=ev.w||['all'];
@@ -586,10 +624,11 @@ function saveEvent(){
   const e=timeToH(document.getElementById('ed-end').value);
   const newDi=Number(document.getElementById('ed-day').value);
   const cat=document.getElementById('ed-cat').value;
+  const place=document.getElementById('ed-place').value;
   if(e<=s){toast('終了は開始より後に');return;}
 
   const w=readW();
-  const newEv={s,e,t:title,u:note,c:cat,w};
+  const newEv={s,e,t:title,u:note,c:cat,w,p:place};
 
   if(editTarget){
     const {di,ei}=editTarget;
@@ -621,6 +660,7 @@ function addEvent(){
   document.getElementById('ed-end').value='10:00';
   document.getElementById('ed-day').value='0';
   document.getElementById('ed-cat').value='pry';
+  document.getElementById('ed-place').value='atelier';
   document.getElementById('modal-title').textContent='イベント追加';
   document.getElementById('btn-delete').style.display='none';
   setCheckboxes(PAGE_FILTER?false:true, PAGE_FILTER==='shuto', PAGE_FILTER==='zastin', PAGE_FILTER==='issei');
