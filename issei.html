@@ -54,21 +54,33 @@ body { background: var(--bg); color: var(--text); font-family: 'Noto Sans JP', s
 .nav a { font-size:10px; text-decoration:none; padding:3px 10px; border-radius:4px; border:1px solid var(--border); color:var(--text-dim); }
 .nav a.active { color:var(--pry); border-color:var(--pry); }
 
-.legend { padding: 8px 20px; display:flex; gap:14px; flex-wrap:wrap; border-bottom:1px solid var(--border); }
-.legend-item { display:flex; align-items:center; gap:4px; font-size:9px; color:var(--text-dim); }
-.legend-dot { width:8px; height:8px; border-radius:2px; }
+.filter-bar { padding:6px 20px; display:flex; gap:10px; flex-wrap:wrap; border-bottom:1px solid var(--border); align-items:center; }
+.filter-label { font-family:'DM Mono',monospace; font-size:8px; color:var(--text-dim); font-weight:600; letter-spacing:.06em; min-width:56px; }
+.ftag { font-family:'DM Mono',monospace; font-size:7px; padding:2px 6px; border-radius:2px; letter-spacing:.04em; cursor:pointer; transition:all .15s; opacity:.45; border:1px solid transparent; }
+.ftag:hover { opacity:.85; }
+.ftag.active { opacity:1; box-shadow:0 0 0 1px currentColor; }
 
-.floor-legend { padding:6px 20px; display:flex; gap:16px; flex-wrap:wrap; border-bottom:1px solid var(--border); align-items:center; }
-.floor-legend-title { font-size:8px; color:var(--text-dim); font-weight:600; letter-spacing:.06em; }
-.floor-tag { font-family:'DM Mono',monospace; font-size:7px; padding:1px 5px; border-radius:2px; letter-spacing:.04em; cursor:pointer; transition:all .15s; opacity:.6; }
-.floor-tag:hover { opacity:1; }
-.floor-tag.active { opacity:1; box-shadow:0 0 0 1px currentColor; }
-.floor-tag-studio { background:rgba(201,168,76,.2); color:#c9a84c; border:1px solid rgba(201,168,76,.3); }
-.floor-tag-atelier { background:rgba(91,141,239,.15); color:#7ba8f5; border:1px solid rgba(91,141,239,.25); }
-.floor-tag-cabinet { background:rgba(168,130,255,.15); color:#b8a0ff; border:1px solid rgba(168,130,255,.25); }
-.floor-tag-remote { background:rgba(100,200,140,.12); color:#6fcf97; border:1px solid rgba(100,200,140,.2); }
-.floor-tag-online { background:rgba(255,255,255,.06); color:#777; border:1px solid rgba(255,255,255,.1); }
-.floor-tag-fieldwork { background:rgba(255,160,80,.15); color:#f0a050; border:1px solid rgba(255,160,80,.25); }
+.ftag-all { background:rgba(255,255,255,.08); color:#aaa; border-color:rgba(255,255,255,.15); }
+.ftag-shuto { background:rgba(201,168,76,.18); color:#c9a84c; border-color:rgba(201,168,76,.25); }
+.ftag-zastin { background:rgba(232,93,93,.15); color:#e87070; border-color:rgba(232,93,93,.2); }
+.ftag-issei { background:rgba(91,141,239,.15); color:#7ba8f5; border-color:rgba(91,141,239,.2); }
+
+.ftag-studio { background:rgba(201,168,76,.2); color:#c9a84c; border-color:rgba(201,168,76,.3); }
+.ftag-atelier { background:rgba(91,141,239,.15); color:#7ba8f5; border-color:rgba(91,141,239,.25); }
+.ftag-cabinet { background:rgba(168,130,255,.15); color:#b8a0ff; border-color:rgba(168,130,255,.25); }
+.ftag-remote { background:rgba(100,200,140,.12); color:#6fcf97; border-color:rgba(100,200,140,.2); }
+.ftag-online { background:rgba(255,255,255,.06); color:#777; border-color:rgba(255,255,255,.1); }
+.ftag-fieldwork { background:rgba(255,160,80,.15); color:#f0a050; border-color:rgba(255,160,80,.25); }
+
+.ftag-board { background:var(--board-dim); color:#c4bcf5; border-color:rgba(124,111,224,.35); }
+.ftag-pry { background:var(--pry-dim); color:#e8d89a; border-color:rgba(201,168,76,.35); }
+.ftag-yt { background:var(--yt-dim); color:#f5a8a8; border-color:rgba(209,87,87,.3); }
+.ftag-design { background:var(--design-dim); color:#a4c1f7; border-color:rgba(91,141,239,.3); }
+.ftag-mtg { background:var(--mtg-dim); color:#fbbf24; border-color:rgba(217,119,6,.3); }
+.ftag-live { background:var(--live-dim); color:#ff9a9a; border-color:rgba(220,50,50,.3); }
+.ftag-notify { background:var(--notify-dim); color:#f5d08a; border-color:rgba(204,156,52,.3); }
+.ftag-field { background:var(--field-dim); color:#6fcf97; border-color:rgba(46,139,87,.3); }
+.ftag-off { background:var(--off-dim); color:#666; border-color:rgba(80,80,80,.3); }
 
 .container { padding:10px 8px 16px; overflow-x:auto; }
 
@@ -147,24 +159,36 @@ body { background: var(--bg); color: var(--text); font-family: 'Noto Sans JP', s
 <div class="nav">
   <a href="index.html">全体</a><a href="shuto.html">Shuto</a><a href="zastin.html">Zastin</a><a href="issei.html" class="active">Issei</a>
 </div>
-<div class="legend">
-  <div class="legend-item"><div class="legend-dot" style="background:var(--board)"></div>ボードワーク</div>
-  <div class="legend-item"><div class="legend-dot" style="background:var(--pry)"></div>PRY（撮影・ブレスト）</div>
-  <div class="legend-item"><div class="legend-dot" style="background:var(--yt)"></div>UNI（ブレスト・調査・撮影）</div>
-  <div class="legend-item"><div class="legend-dot" style="background:var(--design)"></div>個人ワーク</div>
-  <div class="legend-item"><div class="legend-dot" style="background:var(--mtg)"></div>外部MTG</div>
-  <div class="legend-item"><div class="legend-dot" style="background:var(--live)"></div>LIVE / 販売</div>
-  <div class="legend-item"><div class="legend-dot" style="background:var(--notify)"></div>配信・告知・YT公開</div>
-  <div class="legend-item"><div class="legend-dot" style="background:var(--field)"></div>動画納品（前日19:00締切）</div>
+
+<div class="filter-bar" id="filter-member">
+  <span class="filter-label">MEMBER:</span>
+  <span class="ftag ftag-all active" data-member="all" onclick="toggleMember(this)">ALL</span>
+  <span class="ftag ftag-shuto active" data-member="shuto" onclick="toggleMember(this)">SHUTO</span>
+  <span class="ftag ftag-zastin active" data-member="zastin" onclick="toggleMember(this)">ZASTIN</span>
+  <span class="ftag ftag-issei active" data-member="issei" onclick="toggleMember(this)">ISSEI</span>
 </div>
-<div class="floor-legend" id="floor-legend">
-  <span class="floor-legend-title">FLOOR:</span>
-  <span class="floor-tag floor-tag-studio active" data-floor="studio" onclick="toggleFloor(this)">4F STUDIO</span>
-  <span class="floor-tag floor-tag-atelier active" data-floor="atelier" onclick="toggleFloor(this)">5F ATELIER</span>
-  <span class="floor-tag floor-tag-cabinet active" data-floor="cabinet" onclick="toggleFloor(this)">5F CABINET</span>
-  <span class="floor-tag floor-tag-remote active" data-floor="remote" onclick="toggleFloor(this)">REMOTE</span>
-  <span class="floor-tag floor-tag-online active" data-floor="online" onclick="toggleFloor(this)">ONLINE</span>
-  <span class="floor-tag floor-tag-fieldwork active" data-floor="fieldwork" onclick="toggleFloor(this)">FIELDWORK</span>
+
+<div class="filter-bar" id="filter-floor">
+  <span class="filter-label">FLOOR:</span>
+  <span class="ftag ftag-studio active" data-floor="studio" onclick="toggleFloor(this)">4F STUDIO</span>
+  <span class="ftag ftag-atelier active" data-floor="atelier" onclick="toggleFloor(this)">5F ATELIER</span>
+  <span class="ftag ftag-cabinet active" data-floor="cabinet" onclick="toggleFloor(this)">5F CABINET</span>
+  <span class="ftag ftag-remote active" data-floor="remote" onclick="toggleFloor(this)">REMOTE</span>
+  <span class="ftag ftag-online active" data-floor="online" onclick="toggleFloor(this)">ONLINE</span>
+  <span class="ftag ftag-fieldwork active" data-floor="fieldwork" onclick="toggleFloor(this)">FIELDWORK</span>
+</div>
+
+<div class="filter-bar" id="filter-task">
+  <span class="filter-label">TASK:</span>
+  <span class="ftag ftag-board active" data-task="board" onclick="toggleTask(this)">ボードワーク</span>
+  <span class="ftag ftag-pry active" data-task="pry" onclick="toggleTask(this)">PRY</span>
+  <span class="ftag ftag-yt active" data-task="yt" onclick="toggleTask(this)">UNI</span>
+  <span class="ftag ftag-design active" data-task="design" onclick="toggleTask(this)">個人ワーク</span>
+  <span class="ftag ftag-mtg active" data-task="mtg" onclick="toggleTask(this)">外部MTG</span>
+  <span class="ftag ftag-live active" data-task="live" onclick="toggleTask(this)">LIVE/販売</span>
+  <span class="ftag ftag-notify active" data-task="notify" onclick="toggleTask(this)">配信・告知</span>
+  <span class="ftag ftag-field active" data-task="field" onclick="toggleTask(this)">動画納品</span>
+  <span class="ftag ftag-off active" data-task="off" onclick="toggleTask(this)">非稼働</span>
 </div>
 
 <div class="container">
@@ -310,7 +334,12 @@ let evs;
 let dragState=null;
 let editTarget=null;
 let dayBodies=[];
-let activeFloors=new Set(['studio','atelier','cabinet','remote','online','fieldwork']);
+const ALL_MEMBERS=['all','shuto','zastin','issei'];
+const ALL_FLOORS=['studio','atelier','cabinet','remote','online','fieldwork'];
+const ALL_TASKS=['board','pry','yt','design','mtg','live','notify','field','off'];
+let activeMembers=new Set(ALL_MEMBERS);
+let activeFloors=new Set(ALL_FLOORS);
+let activeTasks=new Set(ALL_TASKS);
 
 function deepClone(o){return JSON.parse(JSON.stringify(o));}
 
@@ -339,34 +368,39 @@ function getVisible(di){
       const w=ev.w||['all'];
       if(!w.includes('all')&&!w.includes(PAGE_FILTER))return false;
     }
-    if(activeFloors.size<6){
-      const p=ev.p||'atelier';
-      if(!activeFloors.has(p))return false;
+    if(activeMembers.size<ALL_MEMBERS.length){
+      const w=ev.w||['all'];
+      if(!w.some(m=>activeMembers.has(m)))return false;
+    }
+    if(activeFloors.size<ALL_FLOORS.length){
+      if(!activeFloors.has(ev.p||'atelier'))return false;
+    }
+    if(activeTasks.size<ALL_TASKS.length){
+      if(!activeTasks.has(ev.c||'pry'))return false;
     }
     return true;
   });
 }
 
-function toggleFloor(el){
-  const f=el.dataset.floor;
-  const allTags=document.querySelectorAll('.floor-tag[data-floor]');
-  const ALL_FLOORS=['studio','atelier','cabinet','remote','online','fieldwork'];
-  const allActive=activeFloors.size===ALL_FLOORS.length;
-  if(allActive){
-    activeFloors=new Set([f]);
-    allTags.forEach(t=>t.classList.toggle('active',t.dataset.floor===f));
-  } else if(activeFloors.has(f)&&activeFloors.size===1){
-    activeFloors=new Set(ALL_FLOORS);
-    allTags.forEach(t=>t.classList.add('active'));
-  } else if(activeFloors.has(f)){
-    activeFloors.delete(f);
-    el.classList.remove('active');
+function _toggle(el, attr, activeSet, allArr, selector){
+  const v=el.dataset[attr];
+  const tags=document.querySelectorAll(selector);
+  if(activeSet.size===allArr.length){
+    activeSet.clear(); activeSet.add(v);
+    tags.forEach(t=>t.classList.toggle('active',t.dataset[attr]===v));
+  } else if(activeSet.has(v)&&activeSet.size===1){
+    allArr.forEach(x=>activeSet.add(x));
+    tags.forEach(t=>t.classList.add('active'));
+  } else if(activeSet.has(v)){
+    activeSet.delete(v); el.classList.remove('active');
   } else {
-    activeFloors.add(f);
-    el.classList.add('active');
+    activeSet.add(v); el.classList.add('active');
   }
   render();
 }
+function toggleMember(el){_toggle(el,'member',activeMembers,ALL_MEMBERS,'.ftag[data-member]');}
+function toggleFloor(el){_toggle(el,'floor',activeFloors,ALL_FLOORS,'.ftag[data-floor]');}
+function toggleTask(el){_toggle(el,'task',activeTasks,ALL_TASKS,'.ftag[data-task]');}
 
 function snap(v){return Math.round(v/SNAP)*SNAP;}
 function fmt(h){const hh=Math.floor(h),mm=Math.round((h%1)*60);return `${String(hh).padStart(2,'0')}:${String(mm).padStart(2,'0')}`;}
