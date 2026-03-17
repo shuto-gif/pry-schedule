@@ -171,6 +171,7 @@ body { background: var(--bg); color: var(--text); font-family: 'Noto Sans JP', s
   <div class="actions">
     <button onclick="addEvent()">＋ 追加</button>
     <button onclick="overwriteDefault()">保存</button>
+    <button onclick="shareSchedule()">🔗 共有リンク</button>
     <button class="danger" onclick="resetData()">リセット</button>
   </div>
 </div>
@@ -387,7 +388,35 @@ let activeTasks=new Set(ALL_TASKS);
 
 function deepClone(o){return JSON.parse(JSON.stringify(o));}
 
+function encodeShareData(data){
+  const json=JSON.stringify(data);
+  const bytes=new TextEncoder().encode(json);
+  let bin='';bytes.forEach(b=>bin+=String.fromCharCode(b));
+  return btoa(bin).replace(/\+/g,'-').replace(/\//g,'_').replace(/=+$/,'');
+}
+function decodeShareData(str){
+  const b64=str.replace(/-/g,'+').replace(/_/g,'/');
+  const bin=atob(b64);
+  const bytes=new Uint8Array(bin.length);
+  for(let i=0;i<bin.length;i++)bytes[i]=bin.charCodeAt(i);
+  return JSON.parse(new TextDecoder().decode(bytes));
+}
+
 function loadData(){
+  const params=new URLSearchParams(location.search);
+  const shareParam=params.get('share');
+  if(shareParam){
+    try{
+      evs=decodeShareData(shareParam);
+      evs.forEach(d=>d.forEach(ev=>{
+        if(!ev.w)ev.w=['all'];
+        if(!ev.p)ev.p='atelier';
+        if(ev.p==='online')ev.p='remote';
+      }));
+      toast('共有スケジュールを読み込みました');
+      return;
+    }catch(e){console.warn('share param decode failed',e);}
+  }
   const raw=localStorage.getItem(LS_KEY);
   if(raw){
     try{
@@ -402,6 +431,16 @@ function loadData(){
     evs=deepClone(DEFAULT_EVS);
   }
   saveData();
+}
+
+function shareSchedule(){
+  const encoded=encodeShareData(evs);
+  const url='https://shuto-gif.github.io/pry-schedule/?share='+encoded;
+  navigator.clipboard.writeText(url).then(()=>{
+    toast('共有リンクをコピーしました');
+  }).catch(()=>{
+    prompt('下記URLをコピーしてください：',url);
+  });
 }
 
 function saveData(){localStorage.setItem(LS_KEY,JSON.stringify(evs));}
