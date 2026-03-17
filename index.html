@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>PRY 週間スケジュール v10</title>
+<title>PRY 週間スケジュール v14</title>
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;600;800&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
 :root {
@@ -167,7 +167,7 @@ body { background: var(--bg); color: var(--text); font-family: 'Noto Sans JP', s
 
 <div class="header">
   <h1>PRY 週間スケジュール</h1>
-  <span class="ver">v10 — 2026/03/16</span>
+  <span class="ver">v14 — 2026/03/17</span>
   <div class="actions">
     <button onclick="addEvent()">＋ 追加</button>
     <button onclick="overwriteDefault()">保存</button>
@@ -235,7 +235,7 @@ body { background: var(--bg); color: var(--text); font-family: 'Noto Sans JP', s
   <div class="zero-pt">零点通過（購入）= <span>月曜 21:00–22:00</span></div>
 </div>
 
-<div class="footer">v10 — 2026/03/16　更新者：シュウト　次回レビュー：南青山移転後（2026/04〜）</div>
+<div class="footer">v14 — 2026/03/17　更新者：シュウト　次回レビュー：南青山移転後（2026/04〜）</div>
 
 <div class="modal-overlay" id="modal-overlay">
   <div class="modal">
@@ -1149,7 +1149,7 @@ const DEFAULT_EVS = [
   ]
 ];
 
-const LS_KEY='pry-schedule-v11';
+const LS_KEY='pry-schedule-v14';
 let evs;
 let dragState=null;
 let editTarget=null;
@@ -1260,7 +1260,7 @@ async function saveAsHtml(){
       const blob=new Blob([html],{type:'text/html;charset=utf-8'});
       const a=document.createElement('a');
       a.href=URL.createObjectURL(blob);
-      a.download='PRY_週間スケジュール_v10_chart.html';
+      a.download='PRY_週間スケジュール_v14_chart.html';
       a.click();
       URL.revokeObjectURL(a.href);
     },600);
