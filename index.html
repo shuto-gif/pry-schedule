@@ -435,21 +435,60 @@ function loadData(){
 }
 
 async function saveAsHtml(){
+  // HTMLを取得してDEFAULT_EVSを差し替え
+  let html;
   try{
     const res=await fetch(location.href);
-    let html=await res.text();
+    html=await res.text();
     const newEvs=JSON.stringify(evs,null,2);
     html=html.replace(/const DEFAULT_EVS = \[[\s\S]*?\n\];/,`const DEFAULT_EVS = ${newEvs};`);
-    const blob=new Blob([html],{type:'text/html;charset=utf-8'});
-    const a=document.createElement('a');
-    a.href=URL.createObjectURL(blob);
-    a.download='PRY_週間スケジュール_v10_chart.html';
-    a.click();
-    URL.revokeObjectURL(a.href);
-    toast('HTMLをダウンロードしました');
+  }catch(e){ toast('HTML取得失敗'); return; }
+
+  // GitHub PATを取得（初回のみ入力を求める）
+  let pat=localStorage.getItem('gh-pat');
+  if(!pat){
+    pat=prompt('GitHubアクセストークンを入力してください\n（Settings → Developer settings → Personal access tokens → public_repo スコープ）\n\n※ 次回から自動保存されます');
+    if(!pat) return;
+    localStorage.setItem('gh-pat',pat);
+  }
+
+  const apiUrl='https://api.github.com/repos/shuto-gif/pry-schedule/contents/index.html';
+  const headers={Authorization:`token ${pat}`,'Content-Type':'application/json'};
+
+  try{
+    // 現在のSHAを取得
+    const getRes=await fetch(apiUrl,{headers});
+    if(!getRes.ok) throw new Error('GET '+getRes.status);
+    const {sha}=await getRes.json();
+
+    // UTF-8 → base64
+    const bytes=new TextEncoder().encode(html);
+    let bin=''; bytes.forEach(b=>bin+=String.fromCharCode(b));
+    const content=btoa(bin);
+
+    // ファイルを上書き
+    const putRes=await fetch(apiUrl,{
+      method:'PUT', headers,
+      body:JSON.stringify({message:'スケジュール更新（ブラウザ直接保存）',content,sha})
+    });
+    if(putRes.ok){
+      toast('GitHubに保存しました ✓');
+    } else {
+      const err=await putRes.json();
+      if(putRes.status===401){ localStorage.removeItem('gh-pat'); }
+      throw new Error(err.message||putRes.status);
+    }
   }catch(e){
     console.error(e);
-    toast('取得失敗。ファイル直接編集が必要です');
+    toast('API失敗 → ダウンロードに切替');
+    setTimeout(()=>{
+      const blob=new Blob([html],{type:'text/html;charset=utf-8'});
+      const a=document.createElement('a');
+      a.href=URL.createObjectURL(blob);
+      a.download='PRY_週間スケジュール_v10_chart.html';
+      a.click();
+      URL.revokeObjectURL(a.href);
+    },600);
   }
 }
 
