@@ -1,3 +1,16 @@
-<!DOCTYPE html><html><body><pre id="d"></pre><script>
-document.getElementById('d').textContent=localStorage.getItem('pry-schedule-v11')||'NO DATA';
+<!DOCTYPE html><html><body style="font:12px monospace;word-break:break-all;white-space:pre-wrap;padding:10px"><script>
+const d=JSON.parse(localStorage.getItem('pry-schedule-v11')||'[]');
+const days=['月','火','水','木','金','土','日'];
+d.forEach((evs,i)=>{
+  document.write('<b>==='+days[i]+'===</b>\n');
+  evs.forEach(ev=>{
+    const sh=Math.floor(ev.s),sm=Math.round((ev.s%1)*60);
+    const eh=Math.floor(ev.e),em=Math.round((ev.e%1)*60);
+    const st=String(sh).padStart(2,'0')+':'+String(sm).padStart(2,'0');
+    const et=String(eh).padStart(2,'0')+':'+String(em).padStart(2,'0');
+    const w=JSON.stringify(ev.w||['all']);
+    document.write(st+'-'+et+' | '+ev.c+' | '+w+' | '+ev.p+' | '+ev.t+(ev.u?' ('+ev.u+')':'')+'\n');
+  });
+  document.write('\n');
+});
 </script></body></html>
