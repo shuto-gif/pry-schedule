@@ -171,6 +171,7 @@ body { background: var(--bg); color: var(--text); font-family: 'Noto Sans JP', s
   <div class="actions">
     <button onclick="addEvent()">＋ 追加</button>
     <button onclick="overwriteDefault()">保存</button>
+    <button onclick="saveAsHtml()">📥 上書き保存</button>
     <button onclick="shareSchedule()">🔗 共有リンク</button>
     <button class="danger" onclick="resetData()">リセット</button>
   </div>
@@ -431,6 +432,25 @@ function loadData(){
     evs=deepClone(DEFAULT_EVS);
   }
   saveData();
+}
+
+async function saveAsHtml(){
+  try{
+    const res=await fetch(location.href);
+    let html=await res.text();
+    const newEvs=JSON.stringify(evs,null,2);
+    html=html.replace(/const DEFAULT_EVS = \[[\s\S]*?\n\];/,`const DEFAULT_EVS = ${newEvs};`);
+    const blob=new Blob([html],{type:'text/html;charset=utf-8'});
+    const a=document.createElement('a');
+    a.href=URL.createObjectURL(blob);
+    a.download='PRY_週間スケジュール_v10_chart.html';
+    a.click();
+    URL.revokeObjectURL(a.href);
+    toast('HTMLをダウンロードしました');
+  }catch(e){
+    console.error(e);
+    toast('取得失敗。ファイル直接編集が必要です');
+  }
 }
 
 function shareSchedule(){
